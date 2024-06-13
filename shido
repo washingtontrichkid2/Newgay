@@ -1,0 +1,16 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("Blindness", "DarkTheme")
+local Main = Window:NewTab("ShindoLife")
+local MainSection = Main:NewSection("ShindoLife")
+ 
+MainSection:NewButton("GUI 1", "Executor Script", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/reavscripts/sl2_autofarm/main/main.lua"))()
+end)
+ 
+MainSection:NewButton("GUI 2", "Executor Script", function()
+    loadstring(game:HttpGet("https://pastebin.com/raw/Kc7XZKbC"))()
+   end)
+ 
+MainSection:NewButton("Auto Quest", "Executor Script", function()
+    loadstring(game:HttpGet("https://pastebin.com/raw/d993kP6G"))()
+end)
