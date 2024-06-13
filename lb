@@ -1,0 +1,16 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("Blindness","Serpent")
+
+--Home
+
+local Tab = Window:NewTab("Home") 
+local Tab = Window:NewTab("Luckyblock") 
+local Section = Tab:NewSection("Luckyblocks")
+
+Section:NewButton("Luckyblock", "give you the lucky block", function()
+    game:GetService("ReplicatedStorage").SpawnLuckyBlock:FireServer()
+end)
+
+Section:NewButton("Superblock", "give you the super block", function()
+    game:GetService("ReplicatedStorage").SpawnSuperBlock:FireServer()
+end)
