@@ -14,3 +14,7 @@ MainSection:NewButton("GUI 2", "Executor Script", function()
 MainSection:NewButton("Auto Quest", "Executor Script", function()
     loadstring(game:HttpGet("https://pastebin.com/raw/d993kP6G"))()
 end)
+
+MainSection:NewButton("Shindo Ski", "Executor Script", function()
+    loadstring(game:HttpGet((“https://raw.githubusercontent.com/Yousuck780/shindo-life/main/life”), true))()
+end)
