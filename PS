@@ -1,0 +1,13 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("Blindness", "BloodTheme")
+local Main = Window:NewTab("projectSlayer")
+local MainSection = Main:NewSection("Project slayer")
+
+MainSection:NewButton("AutoSpin", "Executor Script", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/VolertX/Project-Slayers/main/Script"))()
+end)
+
+MainSection:NewButton("autofarm flower", "Executor Script", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/lomychx/projectslayer/main/script.lua"))()
+
+end)
