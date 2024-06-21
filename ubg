@@ -1,0 +1,168 @@
+msg = Instance.new("Message")
+msg.Parent = game.Workspace
+msg.Text = "Thanl you for using it." 
+wait(5)
+msg.Text = "untitled boxing game autoblock work when your stamina run out!" 
+wait(5)
+msg:Remove()
+
+local getgenv, getnamecallmethod, hookmetamethod, hookfunction, newcclosure, checkcaller, lower, gsub, match
+	= getgenv, getnamecallmethod, hookmetamethod, hookfunction, newcclosure, checkcaller, string.lower, string.gsub, string.match;
+
+--// Loaded check
+
+if getgenv().ED_AntiKick then
+	return
+end
+
+--// Variables
+
+local cloneref = cloneref or function(...) return ... end -- PR NOTE: use for extra protection
+local clonefunction = clonefunction or function(...) return ... end
+local Players, LocalPlayer, StarterGui = cloneref(game:GetService("Players")), cloneref(game:GetService("Players").LocalPlayer), cloneref(game:GetService("StarterGui"))
+
+local SetCore = clonefunction(StarterGui.SetCore)
+local GetDebugId = clonefunction(game.GetDebugId)
+local FindFirstChild = clonefunction(game.FindFirstChild) -- PR NOTE: this will be used to prevent kick baits relating to Unable to cast value to std::string
+
+local compareinstances = (compareinstances and function(ins1, ins2)
+		if typeof(ins1) == "Instance" and typeof(ins2) == "Instance" then
+			return compareinstances(ins1, ins2);
+		end
+	end)
+or
+function(ins1, ins2)
+	return (typeof(ins1) == "Instance" and typeof(ins2) == "Instance") and GetDebugId(ins1) == GetDebugId(ins2);
+end;
+
+local function CanCastToSTDString(val)
+	-- PR NOTE: using FindFirstChild, this will make sure invalid arguments like newproxy() are sent through
+	local success, err = pcall(FindFirstChild, game, val);
+	return success --and not match(err, "Unable to cast value to std::string");
+end
+
+--// Global Variables
+
+getgenv().ED_AntiKick = {
+	Enabled = true, -- Set to false if you want to disable the Anti-Kick.
+	SendNotifications = true, -- Set to true if you want to get notified for every event
+	CheckCaller = false -- Set to true if you want to disable kicking by other executed scripts
+}
+
+--// Main
+
+local OldNamecall;
+OldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
+	local self, message = ...
+	local method = getnamecallmethod()
+	
+	if ((getgenv().ED_AntiKick.CheckCaller and not checkcaller()) or true) and compareinstances(self, LocalPlayer) and gsub(method, "^%l", string.upper) == "Kick" and ED_AntiKick.Enabled then
+		if CanCastToSTDString(message) then
+			if getgenv().ED_AntiKick.SendNotifications then
+				SetCore(StarterGui, "SendNotification", { -- PR NOTE: prevent stack overflow :)
+					Title = "BlindnessHub",
+					Text = "The script has successfully intercepted an attempted kick.",
+					Icon = "rbxassetid://6238540373",
+					Duration = 2,
+				})
+			end
+
+			return; -- PR NOTE: calling :Kick() should return 0 args but returning nil will return 1 arg, bad news...
+		end
+	end
+
+	return OldNamecall(...)
+end))
+
+local OldFunction;
+OldFunction = hookfunction(LocalPlayer.Kick, function(...)
+	local self, message = ...
+
+	if ((getgenv().ED_AntiKick.CheckCaller and not checkcaller()) or true) and compareinstances(self, LocalPlayer) and ED_AntiKick.Enabled then
+		if CanCastToSTDString(message) then
+			if getgenv().ED_AntiKick.SendNotifications then
+				SetCore(StarterGui, "SendNotification", { -- PR NOTE: prevent stack overflow :)
+					Title = "BlindnessHub",
+					Text = "The script has successfully intercepted an attempted kick.",
+					Icon = "rbxassetid://6238540373",
+					Duration = 2,
+				})
+			end
+
+			return;
+		end
+	end
+end)
+
+if getgenv().ED_AntiKick.SendNotifications then
+	StarterGui:SetCore("SendNotification", {
+		Title = "BlindnessHub",
+		Text = "Anti-Kick script loaded!",
+		Icon = "rbxassetid://6238537240",
+		Duration = 20,
+	})
+end
+
+--[[ Made by ThroughTheFireAndFlames#9925 | :)
+
+        Untitled Boxing Game AutoBlock [Open Source]
+
+--]]--------------------------------------
+
+-- getgenv().Distance = 15
+-- getgenv().AutoClicker = false
+
+local Teleport = function(x, y, z)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(x, y, z);
+end
+
+local Press = function(v)
+	return game:GetService("VirtualInputManager"):SendKeyEvent(true, v, false, game);
+end
+
+local Unpress = function(v)
+	return game:GetService("VirtualInputManager"):SendKeyEvent(false, v, false, game);
+end
+
+repeat task.wait() until game:IsLoaded();
+game.StarterGui:SetCore("SendNotification", {Title="untitled boxing game",Text="AutoBlock Loaded"});
+wait(15)
+
+workspace.Debris.ChildAdded:Connect(function(v)
+	if ((v.Name == "SoundPart") and ((v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 1.5)) then
+		if ((v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= getgenv().Distance) then
+			Teleport(0,0,3.5);
+			Press("F");
+			wait(4.5);
+			Unpress("F");
+		end
+	end
+end);
+task.spawn(function()
+	while getgenv().AutoClicker == true do
+		wait(0.35);
+		for i, v in pairs(game.Players:GetPlayers()) do
+			if ((v ~= game.Players.LocalPlayer) and (game.Players.LocalPlayer:DistanceFromCharacter(v.Character.HumanoidRootPart.Position) < 5)) then
+				mouse1click(); -- Virtual clicks wouldnt work : (
+			end
+		end
+	end
+end);
+task.spawn(function()
+	game:GetService("Workspace").States[game.Players.LocalPlayer.Name].CharacterData.Stamina.Changed:Connect(function()
+		if (game:GetService("Workspace").States[game.Players.LocalPlayer.Name].CharacterData.Stamina.Value < 1) then
+			Teleport(0,85,0);
+		end
+	end);
+end);
+task.spawn(function()
+	while true do
+		wait(0.001);
+		game:GetService("Workspace").States[game.Players.LocalPlayer.Name].CharacterData.Stunned.Value = false;
+	end
+end);
+task.spawn(function()
+    while true do wait(0.1)
+        game.Workspace.Gravity = 450;
+    end
+end);
