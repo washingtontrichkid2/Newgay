@@ -1,6 +1,6 @@
 msg = Instance.new("Message")
 msg.Parent = game.Workspace
-msg.Text = "Thanl you for using it." 
+msg.Text = "Thank you for using it." 
 wait(5)
 msg.Text = "untitled boxing game autoblock work when your stamina run out!" 
 wait(5)
