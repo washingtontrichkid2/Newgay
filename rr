@@ -1,0 +1,1108 @@
+local THW = Instance.new("ScreenGui")
+local Frame = Instance.new("ImageLabel")
+local Frame_2 = Instance.new("Frame")
+local sidebar = Instance.new("Frame")
+local oreesp = Instance.new("TextButton")
+local TextButton_Roundify_12px_2 = Instance.new("ImageLabel")
+local animalesp = Instance.new("TextButton")
+local TextButton_Roundify_12px_3 = Instance.new("ImageLabel")
+local Oretab = Instance.new("Frame")
+local gold = Instance.new("TextButton")
+local TextLabel = Instance.new("TextLabel")
+local limestone = Instance.new("TextButton")
+local TextLabel_2 = Instance.new("TextLabel")
+local silver = Instance.new("TextButton")
+local TextLabel_3 = Instance.new("TextLabel")
+local strucktrees = Instance.new("TextButton")
+local TextLabel_4 = Instance.new("TextLabel")
+local iron = Instance.new("TextButton")
+local TextLabel_5 = Instance.new("TextLabel")
+local zinc = Instance.new("TextButton")
+local TextLabel_6 = Instance.new("TextLabel")
+local copper = Instance.new("TextButton")
+local TextLabel_7 = Instance.new("TextLabel")
+local coal = Instance.new("TextButton")
+local TextLabel_8 = Instance.new("TextLabel")
+local Npctab = Instance.new("Frame")
+local bear = Instance.new("TextButton")
+local TextLabel_13 = Instance.new("TextLabel")
+local bison = Instance.new("TextButton")
+local TextLabel_14 = Instance.new("TextLabel")
+local deer = Instance.new("TextButton")
+local TextLabel_15 = Instance.new("TextLabel")
+local gator = Instance.new("TextButton")
+local TextLabel_16 = Instance.new("TextLabel")
+local TextLabel_17 = Instance.new("TextLabel")
+local Misctab = Instance.new("Frame")
+local title = Instance.new("TextLabel")
+
+--Properties:
+THW.Name = "THW"
+THW.Parent = game:FindFirstChild("CoreGui")
+THW.ResetOnSpawn = false
+
+Frame.Name = "Frame"
+Frame.Parent = THW
+Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BackgroundTransparency = 1.000
+Frame.Position = UDim2.new(0.384453773, 0, 0.331288338, 0)
+Frame.Size = UDim2.new(0, 225, 0, 275)
+Frame.Image = "asset/17531440140"
+Frame.ImageColor3 = Color3.fromRGB(63, 63, 63)
+Frame.ScaleType = Enum.ScaleType.Slice
+Frame.SliceCenter = Rect.new(100, 100, 100, 100)
+Frame.SliceScale = 0.120
+
+Frame_2.Parent = Frame
+Frame_2.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Frame_2.Position = UDim2.new(0.0444444455, 0, 0.127272725, 0)
+Frame_2.Size = UDim2.new(0, 205, 0, 230)
+
+sidebar.Name = "sidebar"
+sidebar.Parent = Frame_2
+sidebar.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+sidebar.BackgroundTransparency = 1.000
+sidebar.Position = UDim2.new(-0.243902445, 0, 0, 0)
+sidebar.Size = UDim2.new(0, 50, 0, 230)
+sidebar.Size = UDim2.new(0, 50, 0, 230)
+
+oreesp.Name = "oreesp"
+oreesp.Parent = sidebar
+oreesp.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+oreesp.BackgroundTransparency = 0
+oreesp.BorderSizePixel = 1.000
+oreesp.Position = UDim2.new(0, 0, 0.252173901, 0)
+oreesp.Size = UDim2.new(0, 50, 0, 50)
+oreesp.ZIndex = 2
+oreesp.Font = Enum.Font.SourceSans
+oreesp.Text = "Ore Esp"
+oreesp.TextColor3 = Color3.fromRGB(0, 0, 0)
+oreesp.TextScaled = true
+oreesp.TextSize = 14.000
+oreesp.TextWrapped = true
+
+TextButton_Roundify_12px_2.Name = "TextButton_Roundify_12px"
+TextButton_Roundify_12px_2.Parent = oreesp
+TextButton_Roundify_12px_2.Active = true
+TextButton_Roundify_12px_2.AnchorPoint = Vector2.new(0.5, 0.5)
+TextButton_Roundify_12px_2.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TextButton_Roundify_12px_2.BackgroundTransparency = 0
+TextButton_Roundify_12px_2.Position = UDim2.new(0.5, 0, 0.5, 0)
+TextButton_Roundify_12px_2.Selectable = true
+TextButton_Roundify_12px_2.Size = UDim2.new(1, 0, 1, 0)
+TextButton_Roundify_12px_2.Image = "rbxassetid://3570695787"
+TextButton_Roundify_12px_2.ImageColor3 = Color3.fromRGB(63, 63, 63)
+TextButton_Roundify_12px_2.ScaleType = Enum.ScaleType.Slice
+TextButton_Roundify_12px_2.SliceCenter = Rect.new(100, 100, 100, 100)
+TextButton_Roundify_12px_2.SliceScale = 0.120
+
+animalesp.Name = "animalesp"
+animalesp.Parent = sidebar
+animalesp.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+animalesp.BackgroundTransparency = 0
+animalesp.BorderSizePixel = 0
+animalesp.Position = UDim2.new(0, 0, 0.495652139, 0)
+animalesp.Size = UDim2.new(0, 50, 0, 50)
+animalesp.ZIndex = 2
+animalesp.Font = Enum.Font.SourceSans
+animalesp.Text = "Npc Esp"
+animalesp.TextColor3 = Color3.fromRGB(0, 0, 0)
+animalesp.TextScaled = true
+animalesp.TextSize = 14.000
+animalesp.TextWrapped = true
+
+TextButton_Roundify_12px_3.Name = "TextButton_Roundify_12px"
+TextButton_Roundify_12px_3.Parent = animalesp
+TextButton_Roundify_12px_3.Active = true
+TextButton_Roundify_12px_3.AnchorPoint = Vector2.new(0.5, 0.5)
+TextButton_Roundify_12px_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextButton_Roundify_12px_3.BackgroundTransparency = 0
+TextButton_Roundify_12px_3.Position = UDim2.new(0.5, 0, 0.5, 0)
+TextButton_Roundify_12px_3.Selectable = true
+TextButton_Roundify_12px_3.Size = UDim2.new(1, 0, 1, 0)
+TextButton_Roundify_12px_3.Image = "rbxassetid://3570695787"
+TextButton_Roundify_12px_3.ImageColor3 = Color3.fromRGB(63, 63, 63)
+TextButton_Roundify_12px_3.ScaleType = Enum.ScaleType.Slice
+TextButton_Roundify_12px_3.SliceCenter = Rect.new(100, 100, 100, 100)
+TextButton_Roundify_12px_3.SliceScale = 0.120
+
+
+
+Oretab.Name = "Oretab"
+Oretab.Parent = Frame_2
+Oretab.BackgroundColor3 = Color3.fromRGB(25, 255, 255)
+Oretab.Size = UDim2.new(0, 205, 0, 230)
+
+gold.Name = "gold"
+gold.Parent = Oretab
+gold.BackgroundColor3 = Color3.fromRGB(255, 217, 62)
+gold.Position = UDim2.new(0.12195123, 0, 0.0391304344, 0)
+gold.Size = UDim2.new(0, 75, 0, 25)
+gold.Font = Enum.Font.SourceSans
+gold.Text = "Gold esp"
+gold.TextColor3 = Color3.fromRGB(0, 0, 0)
+gold.TextSize = 14.000
+gold.TextWrapped = true
+
+TextLabel.Parent = gold
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+TextLabel.Position = UDim2.new(-0.333333343, 0, 0, 0)
+TextLabel.Size = UDim2.new(0, 25, 0, 25)
+TextLabel.Font = Enum.Font.SourceSans
+TextLabel.Text = "Off"
+TextLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.TextScaled = true
+TextLabel.TextSize = 14.000
+TextLabel.TextWrapped = true
+
+limestone.Name = "limestone"
+limestone.Parent = Oretab
+limestone.BackgroundColor3 = Color3.fromRGB(255, 217, 62)
+limestone.Position = UDim2.new(0.12195123, 0, 0.173913047, 0)
+limestone.Size = UDim2.new(0, 75, 0, 25)
+limestone.Font = Enum.Font.SourceSans
+limestone.Text = "Limestone esp"
+limestone.TextColor3 = Color3.fromRGB(0, 0, 0)
+limestone.TextScaled = true
+limestone.TextSize = 14.000
+limestone.TextWrapped = true
+
+TextLabel_2.Parent = limestone
+TextLabel_2.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+TextLabel_2.Position = UDim2.new(-0.333333343, 0, 0, 0)
+TextLabel_2.Size = UDim2.new(0, 25, 0, 25)
+TextLabel_2.Font = Enum.Font.SourceSans
+TextLabel_2.Text = "Off"
+TextLabel_2.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_2.TextScaled = true
+TextLabel_2.TextSize = 14.000
+TextLabel_2.TextWrapped = true
+
+silver.Name = "silver"
+silver.Parent = Oretab
+silver.BackgroundColor3 = Color3.fromRGB(255, 217, 62)
+silver.Position = UDim2.new(0.634146333, 0, 0.0391304344, 0)
+silver.Size = UDim2.new(0, 75, 0, 25)
+silver.Font = Enum.Font.SourceSans
+silver.Text = "Silver esp"
+silver.TextColor3 = Color3.fromRGB(0, 0, 0)
+silver.TextSize = 14.000
+silver.TextWrapped = true
+
+TextLabel_3.Parent = silver
+TextLabel_3.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+TextLabel_3.Position = UDim2.new(-0.333333343, 0, 0, 0)
+TextLabel_3.Size = UDim2.new(0, 25, 0, 25)
+TextLabel_3.Font = Enum.Font.SourceSans
+TextLabel_3.Text = "Off"
+TextLabel_3.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_3.TextScaled = true
+TextLabel_3.TextSize = 14.000
+TextLabel_3.TextWrapped = true
+
+strucktrees.Name = "strucktrees"
+strucktrees.Parent = Oretab
+strucktrees.BackgroundColor3 = Color3.fromRGB(255, 217, 62)
+strucktrees.Position = UDim2.new(0.634000003, 0, 0.432999998, 0)
+strucktrees.Size = UDim2.new(0, 75, 0, 25)
+strucktrees.Font = Enum.Font.SourceSans
+strucktrees.Text = "struck trees"
+strucktrees.TextColor3 = Color3.fromRGB(0, 0, 0)
+strucktrees.TextSize = 14.000
+
+TextLabel_4.Parent = strucktrees
+TextLabel_4.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+TextLabel_4.Position = UDim2.new(-0.333333343, 0, 0, 0)
+TextLabel_4.Size = UDim2.new(0, 25, 0, 25)
+TextLabel_4.Font = Enum.Font.SourceSans
+TextLabel_4.Text = "Off"
+TextLabel_4.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_4.TextScaled = true
+TextLabel_4.TextSize = 14.000
+TextLabel_4.TextWrapped = true
+
+iron.Name = "iron"
+iron.Parent = Oretab
+iron.BackgroundColor3 = Color3.fromRGB(255, 217, 62)
+iron.Position = UDim2.new(0.634146333, 0, 0.173913047, 0)
+iron.Size = UDim2.new(0, 75, 0, 25)
+iron.Font = Enum.Font.SourceSans
+iron.Text = "Iron esp"
+iron.TextColor3 = Color3.fromRGB(0, 0, 0)
+iron.TextSize = 14.000
+iron.TextWrapped = true
+
+TextLabel_5.Parent = iron
+TextLabel_5.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+TextLabel_5.Position = UDim2.new(-0.333333343, 0, 0, 0)
+TextLabel_5.Size = UDim2.new(0, 25, 0, 25)
+TextLabel_5.Font = Enum.Font.SourceSans
+TextLabel_5.Text = "Off"
+TextLabel_5.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_5.TextScaled = true
+TextLabel_5.TextSize = 14.000
+TextLabel_5.TextWrapped = true
+
+zinc.Name = "zinc"
+zinc.Parent = Oretab
+zinc.BackgroundColor3 = Color3.fromRGB(255, 217, 62)
+zinc.Position = UDim2.new(0.121951222, 0, 0.304347813, 0)
+zinc.Size = UDim2.new(0, 75, 0, 25)
+zinc.Font = Enum.Font.SourceSans
+zinc.Text = "Zinc esp"
+zinc.TextColor3 = Color3.fromRGB(0, 0, 0)
+zinc.TextSize = 14.000
+zinc.TextWrapped = true
+
+TextLabel_6.Parent = zinc
+TextLabel_6.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+TextLabel_6.Position = UDim2.new(-0.333333343, 0, 0, 0)
+TextLabel_6.Size = UDim2.new(0, 25, 0, 25)
+TextLabel_6.Font = Enum.Font.SourceSans
+TextLabel_6.Text = "Off"
+TextLabel_6.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_6.TextScaled = true
+TextLabel_6.TextSize = 14.000
+TextLabel_6.TextWrapped = true
+
+copper.Name = "copper"
+copper.Parent = Oretab
+copper.BackgroundColor3 = Color3.fromRGB(255, 217, 62)
+copper.Position = UDim2.new(0.634146333, 0, 0.304347813, 0)
+copper.Size = UDim2.new(0, 75, 0, 25)
+copper.Font = Enum.Font.SourceSans
+copper.Text = "Copper esp"
+copper.TextColor3 = Color3.fromRGB(0, 0, 0)
+copper.TextSize = 14.000
+copper.TextWrapped = true
+
+TextLabel_7.Parent = copper
+TextLabel_7.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+TextLabel_7.Position = UDim2.new(-0.333333343, 0, 0, 0)
+TextLabel_7.Size = UDim2.new(0, 25, 0, 25)
+TextLabel_7.Font = Enum.Font.SourceSans
+TextLabel_7.Text = "Off"
+TextLabel_7.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_7.TextScaled = true
+TextLabel_7.TextSize = 14.000
+TextLabel_7.TextWrapped = true
+
+coal.Name = "coal"
+coal.Parent = Oretab
+coal.BackgroundColor3 = Color3.fromRGB(255, 217, 62)
+coal.Position = UDim2.new(0.122000001, 0, 0.432999998, 0)
+coal.Size = UDim2.new(0, 75, 0, 25)
+coal.Font = Enum.Font.SourceSans
+coal.Text = "Coal esp"
+coal.TextColor3 = Color3.fromRGB(0, 0, 0)
+coal.TextSize = 14.000
+coal.TextWrapped = true
+
+TextLabel_8.Parent = coal
+TextLabel_8.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+TextLabel_8.Position = UDim2.new(-0.333333343, 0, 0, 0)
+TextLabel_8.Size = UDim2.new(0, 25, 0, 25)
+TextLabel_8.Font = Enum.Font.SourceSans
+TextLabel_8.Text = "Off"
+TextLabel_8.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_8.TextScaled = true
+TextLabel_8.TextSize = 14.000
+TextLabel_8.TextWrapped = true
+
+Npctab.Name = "Npctab"
+Npctab.Parent = Frame_2
+Npctab.BackgroundColor3 = Color3.fromRGB(25, 255, 255)
+Npctab.Size = UDim2.new(0, 205, 0, 230)
+Npctab.Visible = false
+
+bear.Name = "bear"
+bear.Parent = Npctab
+bear.BackgroundColor3 = Color3.fromRGB(255, 217, 62)
+bear.Position = UDim2.new(0.634146333, 0, 0.0521739423, 0)
+bear.Size = UDim2.new(0, 75, 0, 25)
+bear.Font = Enum.Font.SourceSans
+bear.Text = "bear esp"
+bear.TextColor3 = Color3.fromRGB(0, 0, 0)
+bear.TextSize = 14.000
+
+TextLabel_13.Parent = bear
+TextLabel_13.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+TextLabel_13.Position = UDim2.new(-0.333333343, 0, 0, 0)
+TextLabel_13.Size = UDim2.new(0, 25, 0, 25)
+TextLabel_13.Font = Enum.Font.SourceSans
+TextLabel_13.Text = "Off"
+TextLabel_13.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_13.TextScaled = true
+TextLabel_13.TextSize = 14.000
+TextLabel_13.TextWrapped = true
+
+bison.Name = "bison"
+bison.Parent = Npctab
+bison.BackgroundColor3 = Color3.fromRGB(255, 217, 62)
+bison.Position = UDim2.new(0.121951222, 0, 0.0521739349, 0)
+bison.Size = UDim2.new(0, 75, 0, 25)
+bison.Font = Enum.Font.SourceSans
+bison.Text = "bison esp"
+bison.TextColor3 = Color3.fromRGB(0, 0, 0)
+bison.TextSize = 14.000
+
+TextLabel_14.Parent = bison
+TextLabel_14.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+TextLabel_14.Position = UDim2.new(-0.333333343, 0, 0, 0)
+TextLabel_14.Size = UDim2.new(0, 25, 0, 25)
+TextLabel_14.Font = Enum.Font.SourceSans
+TextLabel_14.Text = "Off"
+TextLabel_14.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_14.TextScaled = true
+TextLabel_14.TextSize = 14.000
+TextLabel_14.TextWrapped = true
+
+deer.Name = "deer"
+deer.Parent = Npctab
+deer.BackgroundColor3 = Color3.fromRGB(255, 217, 62)
+deer.Position = UDim2.new(0.634146333, 0, 0.18695654, 0)
+deer.Size = UDim2.new(0, 75, 0, 25)
+deer.Font = Enum.Font.SourceSans
+deer.Text = "deer esp"
+deer.TextColor3 = Color3.fromRGB(0, 0, 0)
+deer.TextSize = 14.000
+
+TextLabel_15.Parent = deer
+TextLabel_15.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+TextLabel_15.Position = UDim2.new(-0.333333343, 0, 0, 0)
+TextLabel_15.Size = UDim2.new(0, 25, 0, 25)
+TextLabel_15.Font = Enum.Font.SourceSans
+TextLabel_15.Text = "Off"
+TextLabel_15.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_15.TextScaled = true
+TextLabel_15.TextSize = 14.000
+TextLabel_15.TextWrapped = true
+
+gator.Name = "gator"
+gator.Parent = Npctab
+gator.BackgroundColor3 = Color3.fromRGB(255, 217, 62)
+gator.Position = UDim2.new(0.121951222, 0, 0.186956555, 0)
+gator.Size = UDim2.new(0, 75, 0, 25)
+gator.Font = Enum.Font.SourceSans
+gator.Text = "gator esp"
+gator.TextColor3 = Color3.fromRGB(0, 0, 0)
+gator.TextSize = 14.000
+
+TextLabel_16.Parent = gator
+TextLabel_16.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+TextLabel_16.Position = UDim2.new(-0.333333343, 0, 0, 0)
+TextLabel_16.Size = UDim2.new(0, 25, 0, 25)
+TextLabel_16.Font = Enum.Font.SourceSans
+TextLabel_16.Text = "Off"
+TextLabel_16.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_16.TextScaled = true
+TextLabel_16.TextSize = 14.000
+TextLabel_16.TextWrapped = true
+
+TextLabel_17.Parent = Npctab
+TextLabel_17.BackgroundColor3 = Color3.fromRGB(255, 217, 62)
+TextLabel_17.BackgroundTransparency = 1.000
+TextLabel_17.Position = UDim2.new(0.00975609757, 0, 0.552173913, 0)
+TextLabel_17.Size = UDim2.new(0, 203, 0, 24)
+TextLabel_17.Font = Enum.Font.SourceSans
+TextLabel_17.Text = "None"
+TextLabel_17.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_17.TextScaled = true
+TextLabel_17.TextSize = 14.000
+TextLabel_17.TextWrapped = true
+
+
+Misctab.Name = "Misctab"
+Misctab.Parent = Frame_2
+Misctab.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Misctab.Size = UDim2.new(0, 205, 0, 230)
+Misctab.Visible = false
+
+
+title.Name = "title"
+title.Parent = Frame
+title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+title.BackgroundTransparency = 1.000
+title.Position = UDim2.new(0.0533333346, 0, 0.0218181815, 0)
+title.Size = UDim2.new(0, 200, 0, 29)
+title.Font = Enum.Font.SourceSans
+title.Text = "WildWest Esp :By washingtonRichKid2" -- Don't remove :(
+title.TextColor3 = Color3.fromRGB(0, 0, 0)
+title.TextScaled = true
+title.TextSize = 14.000
+title.TextWrapped = true
+
+-- Scripts:
+
+local function LIXJUT_fake_script() -- oreesp.LocalScript 
+	local script = Instance.new('LocalScript', oreesp)
+
+	local tab = script.Parent.Parent.Parent.Oretab
+	local tabs = script.Parent.Parent.Parent
+	script.Parent.MouseButton1Click:Connect(function()
+		tab.Visible = true
+		tabs.Npctab.Visible = false
+		tabs.Plrtab.Visible = false
+		tabs.Misctab.Visible = false
+	end)
+end
+coroutine.wrap(LIXJUT_fake_script)()
+local function WEPRS_fake_script() -- animalesp.LocalScript 
+	local script = Instance.new('LocalScript', animalesp)
+
+	local tab = script.Parent.Parent.Parent.Npctab
+	local tabs = script.Parent.Parent.Parent
+	script.Parent.MouseButton1Click:Connect(function()
+		tab.Visible = true
+		tabs.Oretab.Visible = false
+		tabs.Plrtab.Visible = false
+		tabs.Misctab.Visible = false
+	end)
+end
+coroutine.wrap(WEPRS_fake_script)()
+local function ZXKMZN_fake_script() -- Frame.LocalScript 
+	local script = Instance.new('LocalScript', Frame)
+
+	local UIS = game:GetService("UserInputService")
+	function drag (Frame)
+		dragToggle = nil
+		dragSpeed = 0.23
+		dragInput = nil
+		dragStart = nil
+		dragPos = nil
+		function updateInput(input)
+			Delta = input.Position - dragStart
+			Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + Delta.X, startPos.Y.Scale, startPos.Y.Offset + Delta.Y)
+			game:GetService("TweenService"):Create(Frame, TweenInfo.new(0.25), {Position = Position}):Play()
+		end
+		Frame.InputBegan:Connect(function(input)
+			if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and UIS:GetFocusedTextBox() == nil then
+				dragToggle = true
+				dragStart = input.Position
+				startPos = Frame.Position
+				input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						dragToggle = false
+					end
+				end)
+			end
+		end)
+		Frame.InputChanged:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+				dragInput = input
+			end
+		end)
+		game:GetService("UserInputService").InputChanged:Connect(function(input)
+			if input == dragInput and dragToggle then
+				updateInput(input)
+			end
+		end)
+	end
+	drag(script.Parent)
+end
+coroutine.wrap(ZXKMZN_fake_script)()
+
+
+
+local camera = workspace.Camera
+local RunService = game:GetService("RunService")
+local localplayer = game:GetService("Players").LocalPlayer
+local toggle = false
+local toggl = false
+local togg = false
+local tog = false
+local switch = false
+local switc = false
+local swit = false
+local swi = false
+local sw = false
+local evc = false
+local ev = false
+local lst = false
+local eey = false
+local iyt = false
+local efs = false
+local eai = false
+local hpt = false
+local nmt = false
+local bnt = false
+-------------ints ^
+local noerror
+local nonil
+------------- pcalls ^
+local module = require(game:GetService("ReplicatedStorage").Modules.Character.RepCharHandler)
+------------- modules^
+
+function getHealth(player)
+    for i,v in pairs(module.CharacterMap) do
+        if tostring(i) == player then
+            return v.State.Health
+        end
+    end
+end
+
+function getBounty(player)
+    for i,v in pairs(module.CharacterMap) do
+        if tostring(i) == player then
+            return v.State.Bounty
+        end
+    end
+end
+
+function drawplayer(plr)
+    local hp
+    
+    local hpesp = Drawing.new("Text"); hpesp.Size = 13; hpesp.Font = 2; hpesp.Color = Color3.fromRGB(255,255,255); hpesp.Center = true; hpesp.Outline = true; hpesp.OutlineColor = Color3.new(0,0,0)
+    local nameEsp = Drawing.new("Text"); nameEsp.Size = 13; nameEsp.Text = plr.Name; nameEsp.Font = 2; nameEsp.Color = Color3.fromRGB(255,255,255); nameEsp.Center = true; nameEsp.Outline = true; nameEsp.OutlineColor = Color3.new(0,0,0)
+    local bountyesp = Drawing.new("Text"); bountyesp.Size = 13; bountyesp.Font = 2; bountyesp.Color = Color3.fromRGB(255,0,0); bountyesp.Center = true; bountyesp.Outline = true; bountyesp.OutlineColor = Color3.new(0,0,0)
+    local status
+    local Rs
+    local pc
+
+
+
+    Rs = game:GetService("RunService").RenderStepped:Connect(function()
+        pc = pcall(function()
+        local unchpval = tonumber(getHealth(tostring(plr)))
+        local hpval = math.ceil(unchpval)
+            local headpos, onScreen = game:GetService("Workspace").CurrentCamera:WorldToViewportPoint(game:GetService("Players"):FindFirstChild(plr.Name).Character.Head.Position)
+            hpesp.Position = Vector2.new(headpos.X, headpos.Y - 25)
+            nameEsp.Position = Vector2.new(headpos.X, headpos.Y - 15)
+            bountyesp.Position = Vector2.new(headpos.X, headpos.Y - 35)
+            if onScreen then
+                if hpt then
+                    hpesp.Text = tostring(hpval)
+                    if tonumber(hpval) > tonumber(100) * 0.66 then
+                        hpesp.Color = Color3.fromRGB(0,255,0)
+                    elseif tonumber(hpval) > tonumber(100) * 0.33 then
+                        hpesp.Color = Color3.fromRGB(255,255,0)
+                    else
+                        hpesp.Color = Color3.fromRGB(255,0,0)
+                    end
+                    hpesp.Visible = true
+                else
+                    hpesp.Visible = false
+                end
+                if nmt then
+                    nameEsp.Visible = true
+                else
+                    nameEsp.Visible = false
+                end
+                if bnt then
+                    bountyesp.Text = "$" .. tostring(getBounty(tostring(plr)))
+                    bountyesp.Visible = true
+                else
+                    bountyesp.Visible = false
+                end
+            else
+                hpesp.Visible = false
+                nameEsp.Visible = false
+                bountyesp.Visible = false
+            end
+        end)
+    end)
+    game:GetService("Players"):FindFirstChild(plr.Name).CharacterRemoving:Connect(function()
+        hpesp.Visible = false
+        nameEsp.Visible = false
+        bountyesp.Visible = false
+    end)
+
+    local pr
+    pr = game:GetService("Players").PlayerRemoving:Connect(function(player)
+        if player.Name == plr.Name then
+            hpesp:Remove()
+            bountyesp:Remove()
+            nameEsp:Remove()
+            Rs:Disconnect()
+
+            pr:Disconnect()
+        end
+    end)   
+end
+
+for _,plr in ipairs(game:GetService("Players"):GetPlayers()) do
+    if plr == localplayer then
+        
+    else
+    drawplayer(plr)
+    end
+end
+
+game:GetService("Players").PlayerAdded:Connect(function(plr)
+    local w = plr.Character or plr.CharacterAdded:Wait()
+    local h = w:WaitForChild("Humanoid")
+    drawplayer(plr)
+end)
+
+
+local blacklistNames = {"Cow","Horse","Deer","Bison","Bear","UndeadBear","Wendigo","Gator"}
+local animalMaxHP = {
+    ["Deer"] = 50,
+    ["Bison"] = 150,
+    ["Gator"] = 200,
+    ["Bear"] = 300,
+    ["UndeadBear"] = 600,
+    ["Wendigo"] = 3500
+}
+
+function addAnimal(animal)
+    local animalHealth
+    local success
+    repeat wait()
+        success = pcall(function()
+            animalHealth = animal.Health
+        end)
+    until success
+    local nameEsp = Drawing.new("Text"); nameEsp.Text = tostring(animal); nameEsp.Color = Color3.fromRGB(255, 255, 255); nameEsp.Center = true; nameEsp.Outline = true; nameEsp.OutlineColor = Color3.new(0,0,0); nameEsp.Font = 0
+    local healthEsp = Drawing.new("Text"); healthEsp.Center = true; healthEsp.Outline = true; healthEsp.OutlineColor = Color3.new(0,0,0); healthEsp.Font = 0
+
+    local RenderStepped
+    RenderStepped = game:GetService("RunService").RenderStepped:Connect(function()
+        if table.find(blacklistNames, tostring(animal.Name)) then nameEsp.Visible = false; healthEsp.Visible = false return end
+        if animalHealth.Value <= 0 then nameEsp.Visible = false; healthEsp.Visible = false return end
+        healthEsp.Text = tostring(math.ceil(animalHealth.Value))
+        local animalPos, onScreen = game:GetService("Workspace").CurrentCamera:WorldToViewportPoint(animal.Body.CFrame.Position)
+        if onScreen then
+            noerror = pcall(function()
+                if animalHealth.Value > animalMaxHP[tostring(animal.Name)] * 0.66 then
+                    healthEsp.Color = Color3.fromRGB(0, 255, 0)
+                elseif animalHealth.Value > animalMaxHP[tostring(animal.Name)] * 0.33 then
+                    healthEsp.Color = Color3.fromRGB(255, 255, 0)
+                else
+                    healthEsp.Color = Color3.fromRGB(255, 0, 0)
+                end
+                nameEsp.Position = Vector2.new(animalPos.X, animalPos.Y - 25)
+                healthEsp.Position = nameEsp.Position + Vector2.new(0, -15)
+                nameEsp.Size = 1000 / animalPos.Z + 15
+                healthEsp.Size = nameEsp.Size
+                nameEsp.Visible = true
+                healthEsp.Visible = true
+            end)
+        else
+            nameEsp.Visible = false
+            healthEsp.Visible = false
+        end
+    end)
+    local ChildRemoved
+    ChildRemoved = game:GetService("Workspace")["WORKSPACE_Entities"].Animals.ChildRemoved:Connect(function(child)
+        if child == animal then
+            nameEsp:Remove()
+            healthEsp:Remove()
+            RenderStepped:Disconnect()
+
+            ChildRemoved:Disconnect()
+        end
+    end)
+end
+
+for _,animal in ipairs(game:GetService("Workspace")["WORKSPACE_Entities"].Animals:GetChildren()) do
+    addAnimal(animal)
+end
+
+game:GetService("Workspace")["WORKSPACE_Entities"].Animals.ChildAdded:Connect(function(animal)
+    wait(1)
+    addAnimal(animal)
+end)
+
+local blacklistores = {"CoalBase","CopperBase","ZincBase","IronBase","SilverBase","LimestoneOre","GoldBase"}
+function addore(ore, ammt)
+    local ore_esp = Drawing.new("Text"); ore_esp.Text = tostring(ore.Parent.Parent); ore_esp.Center = true; ore_esp.Color = Color3.new(1,1,1); ore_esp.Outline = true; ore_esp.OutlineColor = Color3.new(0,0,0); ore_esp.Font = 2; ore_esp.Size = 13; ore_esp.Visible = false
+    local ore_ammount = Drawing.new("Text"); ore_ammount.Center = true; ore_ammount.Outline = true; ore_ammount.OutlineColor = Color3.new(0,0,0); ore_ammount.Font = 2; ore_ammount.Size = 12; ore_ammount.Visible = false
+    local rs
+    local val = tostring(ore.Parent.DepositInfo.OreRemaining.Value)
+
+
+    rs = game:GetService("RunService").RenderStepped:Connect(function()
+            if table.find(blacklistores, tostring(ore)) then ore_esp.Visible = false; ore_ammount.Visible = false return end
+            local orepos, onScreen = game:GetService("Workspace").CurrentCamera:WorldToViewportPoint(ore.Position)
+            ore_ammount.Text = "Amt: " .. tostring(ore.Parent.DepositInfo.OreRemaining.Value)
+        if onScreen then
+            nonil = pcall(function()
+                if ore.Parent.DepositInfo.OreRemaining.Value >= 1 then
+                    ore_ammount.Color = Color3.fromRGB(0, 255, 0)
+                else
+                    ore_ammount.Color = Color3.fromRGB(255,0,0)
+                end
+                ore_esp.Position = Vector2.new(orepos.X, orepos.Y - 10)
+                ore_ammount.Position = Vector2.new(orepos.X, orepos.Y)
+                ore_esp.Visible = true
+                ore_ammount.Visible = true
+            end)
+        else
+            ore_esp.Visible = false
+            ore_ammount.Visible = false
+        end
+    end)
+end
+for i,v in pairs(game:GetService("Workspace")["WORKSPACE_Interactables"].Mining.OreDeposits:GetDescendants()) do
+    if v.Name == "CoalBase" then
+        addore(v, v.Parent.DepositInfo.OreRemaining.Value)
+    elseif v.Name == "CopperBase" then
+        addore(v, v.Parent.DepositInfo.OreRemaining.Value)
+    elseif v.Name == "ZincBase" then
+        addore(v, v.Parent.DepositInfo.OreRemaining.Value)
+    elseif v.Name == "IronBase" then
+        addore(v, v.Parent.DepositInfo.OreRemaining.Value)
+    elseif v.Name == "SilverBase" then
+        addore(v, v.Parent.DepositInfo.OreRemaining.Value)
+    elseif v.Name == "LimestoneOre" then
+        addore(v, v.Parent.DepositInfo.OreRemaining.Value)
+    elseif v.Name == "GoldBase" then
+        addore(v, v.Parent.DepositInfo.OreRemaining.Value)
+    end
+end
+
+
+gold.MouseButton1Click:Connect(function()
+    if toggle == false then
+        TextLabel.Text = "On"
+        TextLabel.BackgroundColor3 = Color3.fromRGB(0,255,0)
+        toggle = true
+        local ores = table.find(blacklistores, "GoldBase")
+        if ores then
+            table.remove(blacklistores, ores)
+        end
+    else
+        TextLabel.Text = "Off"
+        TextLabel.BackgroundColor3 = Color3.fromRGB(255,0,0)
+        toggle = false
+        table.insert(blacklistores, "GoldBase")
+    end
+end)
+
+silver.MouseButton1Click:Connect(function()
+    if toggl == false then
+        TextLabel_3.Text = "On"
+        TextLabel_3.BackgroundColor3 = Color3.fromRGB(0,255,0)
+        toggl = true
+        local ores = table.find(blacklistores, "SilverBase")
+        if ores then
+            table.remove(blacklistores, ores)
+        end
+    else
+        TextLabel_3.Text = "Off"
+        TextLabel_3.BackgroundColor3 = Color3.fromRGB(255,0,0)
+        toggl = false
+        table.insert(blacklistores, "SilverBase")
+    end
+end)
+
+limestone.MouseButton1Click:Connect(function()
+    if togg == false then
+        TextLabel_2.Text = "On"
+        TextLabel_2.BackgroundColor3 = Color3.fromRGB(0,255,0)
+        togg = true
+        local ores = table.find(blacklistores, "LimestoneOre")
+        if ores then
+            table.remove(blacklistores, ores)
+        end
+    else
+        TextLabel_2.Text = "Off"
+        TextLabel_2.BackgroundColor3 = Color3.fromRGB(255,0,0)
+        togg = false
+        table.insert(blacklistores, "LimestoneOre")
+    end
+end)
+
+iron.MouseButton1Click:Connect(function()
+    if eey == false then
+        TextLabel_5.Text = "On"
+        TextLabel_5.BackgroundColor3 = Color3.fromRGB(0,255,0)
+        eey = true
+        local ores = table.find(blacklistores, "IronBase")
+        if ores then
+            table.remove(blacklistores, ores)
+        end
+    else 
+        TextLabel_5.Text = "Off"
+        TextLabel_5.BackgroundColor3 = Color3.fromRGB(255,0,0)
+        eey = false
+        table.insert(blacklistores, "IronBase")
+    end
+end)
+
+zinc.MouseButton1Click:Connect(function()
+    if iyt == false then
+        TextLabel_6.Text = "On"
+        TextLabel_6.BackgroundColor3 = Color3.fromRGB(0,255,0)
+        local ores = table.find(blacklistores, "ZincBase")
+        iyt = true
+        if ores then
+            table.remove(blacklistores, ores)
+        end
+    else
+        TextLabel_6.Text = "Off"
+        TextLabel_6.BackgroundColor3 = Color3.fromRGB(255,0,0)
+        table.insert(blacklistores, "ZincBase")
+        iyt = false
+    end
+end)
+
+copper.MouseButton1Click:Connect(function()
+    if efs == false then
+        TextLabel_7.Text = "On"
+        TextLabel_7.BackgroundColor3 = Color3.fromRGB(0,255,0)
+        efs = true
+        local ores = table.find(blacklistores, "CopperBase")
+        if ores then
+            table.remove(blacklistores, ores)
+        end
+    else
+        TextLabel_7.Text = "Off"
+        TextLabel_7.BackgroundColor3 = Color3.fromRGB(255,0,0)
+        efs = false
+        table.insert(blacklistores, "CopperBase")
+    end
+end)
+
+coal.MouseButton1Click:Connect(function()
+    if eai == false then
+        TextLabel_8.Text = "On"
+        TextLabel_8.BackgroundColor3 = Color3.fromRGB(0,255,0)
+        eai = true
+        local ores = table.find(blacklistores, "CoalBase")
+        if ores then
+            table.remove(blacklistores, ores)
+        end
+    else
+        TextLabel_8.Text = "Off"
+        TextLabel_8.BackgroundColor3 = Color3.fromRGB(255,0,0)
+        eai = false
+        table.insert(blacklistores, "CoalBase")
+    end
+end)
+
+bison.MouseButton1Click:Connect(function()
+    if ev == false then
+        TextLabel_14.Text = "On"
+        TextLabel_14.BackgroundColor3 = Color3.fromRGB(0,255,0)
+        ev = true
+        local bis = table.find(blacklistNames, "Bison")
+        if bis then
+            table.remove(blacklistNames, bis) 
+        end
+    else
+        TextLabel_14.Text = "Off"
+        TextLabel_14.BackgroundColor3 = Color3.fromRGB(255,0,0)
+        ev = false
+        table.insert(blacklistNames, "Bison")
+    end
+end)
+
+deer.MouseButton1Click:Connect(function()
+    if tog == false then
+        TextLabel_15.Text = "On"
+        TextLabel_15.BackgroundColor3 = Color3.fromRGB(0,255,0)
+        tog = true
+        local dee = table.find(blacklistNames, "Deer")
+        if dee then
+            table.remove(blacklistNames, dee)
+        end
+    else
+        TextLabel_15.Text = "Off"
+        TextLabel_15.BackgroundColor3 = Color3.fromRGB(255,0,0)
+        tog = false
+        table.insert(blacklistNames, "Deer")
+    end
+end)
+
+gator.MouseButton1Click:Connect(function()
+    if switch == false then
+        TextLabel_16.Text = "On"
+        TextLabel_16.BackgroundColor3 = Color3.fromRGB(0,255,0)
+        switch = true
+        local gato = table.find(blacklistNames, "Gator")
+        if gato then
+            table.remove(blacklistNames, gato)
+        end
+    else
+        TextLabel_16.Text = "Off"
+        TextLabel_16.BackgroundColor3 = Color3.fromRGB(255,0,0)
+        switch = false
+        table.insert(blacklistNames, "Gator")
+    end
+end)
+
+bear.MouseButton1Click:Connect(function()
+    if switc == false then
+        switc = true
+        TextLabel_13.Text = "On"
+        TextLabel_13.BackgroundColor3 = Color3.fromRGB(0,255,0)
+        local bea = table.find(blacklistNames, "Bear")
+        if bea then
+            table.remove(blacklistNames, bea)
+        end
+    else
+        TextLabel_13.Text = "Off"
+        TextLabel_13.BackgroundColor3 = Color3.fromRGB(255,0,0)
+        switc = false
+        table.insert(blacklistNames, "Bear")
+    end
+end)
+
+strucktrees.MouseButton1Click:Connect(function()
+    if lst == false then
+        lst = true
+        TextLabel_4.Text = "On"
+        TextLabel_4.BackgroundColor3 = Color3.fromRGB(0,255,0)
+    else
+        lst = false
+        TextLabel_4.Text = "Off"
+        TextLabel_4.BackgroundColor3 = Color3.fromRGB(255,0,0)
+    end
+end)
+
+
+local function Drawstrike(base)
+
+    local stontext = Drawing.new("Text")
+    stontext.Visible = false
+    stontext.Center = true
+    stontext.Outline = true
+    stontext.Font = 2
+    stontext.Size = 13
+    stontext.Color = Color3.new(1, 0.984313, 0)
+    stontext.Text = "ThunderStruck Tree/Cactus"
+
+    local function upper()
+        local c
+        c = game:GetService("RunService").RenderStepped:Connect(function()
+            if base:FindFirstChild("Strike2") then
+
+                local dropvector, onscreen = camera:WorldToViewportPoint(base.Position)
+                stontext.Position = Vector2.new(dropvector.X, dropvector.Y)
+                if onscreen then
+                    if lst then
+
+                        stontext.Visible = true
+                    else
+                        stontext.Visible = false
+                    end
+                else
+                    stontext.Visible = false
+                end
+            end
+            local antinils
+            antinils = pcall(function()
+                
+                local swamp
+                    swamp = game:GetService("Workspace")["WORKSPACE_Geometry"]["REGION_Swamp"].Trees.ChildRemoved:Connect(function(v)
+                        if v == base.Parent then
+                                
+                            stontext:Remove()
+                            c:Disconnect()
+
+                            swamp:Disconnect()
+                        end
+                    end)
+                local raidcaynons
+                raidcaynons = game:GetService("Workspace")["WORKSPACE_Geometry"]["REGION_RaiderCanyons"].Vegetation.ChildRemoved:Connect(function(v)
+                    if v == base.Parent then
+                                
+                        stontext:Remove()
+                        c:Disconnect()
+
+                        raidcaynons:Disconnect()
+                    end
+                end)
+                local mountain
+                mountain = game:GetService("Workspace")["WORKSPACE_Geometry"]["REGION_Mountains"].Trees.ChildRemoved:Connect(function(v)
+                    if v == base.Parent then
+                                
+                        stontext:Remove()
+                        c:Disconnect()
+
+                        mountain:Disconnect()
+                    end
+                end)
+                local plain
+                plain = game:GetService("Workspace")["WORKSPACE_Geometry"]["REGION_Plains"].Trees.ChildRemoved:Connect(function(v)
+                    if v == base.Parent then
+                                
+                        stontext:Remove()
+                        c:Disconnect()
+
+                        plain:Disconnect()
+                    end
+                end)
+                local desert
+                desert = game:GetService("Workspace")["WORKSPACE_Geometry"]["REGION_Desert"].Trees.ChildRemoved:Connect(function(v)
+                    if v == base.Parent then
+                                
+                        stontext:Remove()
+                        c:Disconnect()
+
+                        desert:Disconnect()
+                    end
+                end)
+                local forest
+                forest = game:GetService("Workspace")["WORKSPACE_Geometry"]["REGION_Forest"].Trees.ChildRemoved:Connect(function(v)
+                    if v == base.Parent then
+                                
+                        stontext:Remove()
+                        c:Disconnect()
+
+                        forest:Disconnect()
+                    end
+                end)
+                local bearpaw
+                bearpaw = game:GetService("Workspace")["WORKSPACE_Geometry"]["REGION_BearpawValley"].Trees.ChildRemoved:Connect(function(v)
+                    if v == base.Parent then
+                                
+                        stontext:Remove()
+                        c:Disconnect()
+
+                        bearpaw:Disconnect()
+                    end
+                end)
+                local silverhill
+                silverhill = game:GetService("Workspace")["WORKSPACE_Geometry"]["REGION_Silverhills"].Trees.ChildRemoved:Connect(function(v)
+                    if v == base.Parent then
+                                
+                        stontext:Remove()
+                        c:Disconnect()
+
+                        silverhill:Disconnect()
+                    end
+                end)
+                local highlands
+                highlands = game:GetService("Workspace")["WORKSPACE_Geometry"]["REGION_Highlands"].Trees.ChildRemoved:Connect(function(v)
+                    if v == base.Parent then
+                                
+                        stontext:Remove()
+                        c:Disconnect()
+
+                        highlands:Disconnect()
+                    end
+                end)
+                local cactai
+                cactai = game:GetService("Workspace").Ignore.FoliageModel.ChildRemoved:Connect(function(v)
+                    if v == base.Parent then
+                        stontext:Remove()
+                        c:Disconnect()
+
+                        cactai:Disconnect()
+                    end
+                end)
+            end)
+        end)
+    end
+    coroutine.wrap(upper)()
+end
+
+for i,base in ipairs(game:GetService("Workspace")["WORKSPACE_Geometry"]:GetDescendants()) do
+    if base.Name == "Strike2" then
+        coroutine.wrap(Drawstrike)(base.Parent)
+    end
+ end
+
+game:GetService("Workspace")["WORKSPACE_Geometry"].DescendantAdded:Connect(function(v)
+    if v.Name == "Strike2" then
+        coroutine.wrap(Drawstrike)(v.Parent)
+    end
+end)
+game:GetService("Workspace").Ignore.FoliageModel.DescendantAdded:Connect(function(v)
+    if v.Name == "Strike2" then
+        coroutine.wrap(Drawstrike)(v.Parent)
+    end
+end)
