@@ -1,0 +1,1448 @@
+--[[
+    BlindnessHub: A Roblox UI Library
+    Refactored and restyled version of an object-oriented UI system.
+]]
+
+local UserInputService = game:GetService("UserInputService")
+
+local ElementType = {
+    Unknown = 0,
+    Root = 1,
+    Category = 2,
+    Section = 3,
+    Header = 4,
+    Entry = 5,
+    UiElement = 6,
+}
+
+-- BaseComponent: Foundation for all UI parts
+local BaseComponent = {}
+BaseComponent.__index = BaseComponent
+
+function BaseComponent:New(type, parent, guiObject)
+    local self = setmetatable({}, BaseComponent)
+    self.Type = type or ElementType.Unknown
+    self.Parent = parent -- Will be set correctly by AddChild or if provided
+    self.Children = {}
+    self.GuiObject = guiObject or nil
+
+    if parent then
+        parent:AddChild(self)
+    end
+    return self
+end
+
+function BaseComponent:AddChild(child)
+    child.Parent = self
+    table.insert(self.Children, child)
+    if child.GuiObject and self.GuiObject then
+        child.GuiObject.Parent = self.GuiObject
+    end
+end
+
+function BaseComponent:RecursiveUpdateGui()
+    self:UpdateGui()
+    for _, child in ipairs(self.Children) do
+        child:RecursiveUpdateGui()
+    end
+end
+
+function BaseComponent:UpdateGui()
+    -- Placeholder, to be overridden by derived classes
+end
+
+-- BaseUiElement: Inherits from BaseComponent, represents individual interactable GUI elements
+local BaseUiElement = {}
+BaseUiElement.__index = BaseUiElement
+setmetatable(BaseUiElement, BaseComponent)
+
+function BaseUiElement:New(size, position, title)
+    local self = setmetatable(BaseComponent:New(ElementType.UiElement), BaseUiElement)
+    self.Value = nil
+    self.Title = title
+    self.Size = size
+    self.Position = position
+    return self
+end
+
+function BaseUiElement:SetValue()
+    -- Placeholder
+end
+
+function BaseUiElement:GetValue()
+    return self.Value
+end
+
+-- Theme: Configuration for UI appearance and behavior
+local Theme = {
+    PrimaryColor = Color3.fromRGB(42, 47, 66),     -- Darker, desaturated blue-grey
+    SecondaryColor = Color3.fromRGB(60, 68, 92),   -- Slightly lighter grey/blue
+    AccentColor = Color3.fromRGB(0, 191, 255),     -- Vibrant Cyan
+    TextColor = Color3.fromRGB(220, 220, 230),   -- Light grey/off-white
+    Font = Enum.Font.Gotham,
+    TextSize = 12,
+    HeaderWidth = 260,
+    HeaderHeight = 28,
+    EntryMargin = 1,
+    AnimationDuration = 0.3,
+    AnimationEasingStyle = Enum.EasingStyle.Quint,
+    DefaultEntryHeight = 30,
+}
+
+-- CollapseButton: Button for expanding/collapsing sections/categories
+local CollapseButton = {}
+CollapseButton.__index = CollapseButton
+setmetatable(CollapseButton, BaseUiElement)
+
+function CollapseButton:New()
+    local buttonSize = 18
+    local self = setmetatable(BaseUiElement:New(UDim2.new(0, buttonSize, 0, buttonSize), UDim2.new(1, -buttonSize - 5, 0.5, -buttonSize / 2), ""), CollapseButton)
+    self.GuiObject = Instance.new("TextButton")
+    self.GuiObject.MouseButton1Click:Connect(function()
+        if self.Parent and self.Parent.Parent then -- Parent is HeaderComponent, Parent.Parent is ContainerComponent
+            self.Parent.Parent.Collapsed = not self.Parent.Parent.Collapsed
+            if self.Parent.Parent.Collapsed then
+                self.Parent.Parent:Collapse()
+            else
+                self.Parent.Parent:Expand()
+            end
+        end
+    end)
+    return self
+end
+
+function CollapseButton:Collapse()
+    if self.GuiObject then self.GuiObject.Text = "+" end
+end
+
+function CollapseButton:Expand()
+    if self.GuiObject then self.GuiObject.Text = "-" end
+end
+
+function CollapseButton:UpdateGui()
+    if not self.GuiObject then return end
+    self.GuiObject.TextScaled = true
+    self.GuiObject.TextColor3 = Theme.TextColor
+    self.GuiObject.BackgroundTransparency = 1
+    self.GuiObject.Size = self.Size
+    self.GuiObject.Position = self.Position
+    if self.Parent and self.Parent.Parent and self.Parent.Parent.Collapsed then
+        self.GuiObject.Text = "+"
+    else
+        self.GuiObject.Text = "-"
+    end
+end
+
+-- HeaderComponent: Displays the title for a category or section
+local HeaderComponent = {}
+HeaderComponent.__index = HeaderComponent
+setmetatable(HeaderComponent, BaseComponent)
+
+function HeaderComponent:New()
+    local self = setmetatable(BaseComponent:New(ElementType.Header), HeaderComponent)
+    self.GuiObject = Instance.new("TextLabel")
+    self.CollapseButton = CollapseButton:New()
+    self:AddChild(self.CollapseButton)
+    return self
+end
+
+function HeaderComponent:UpdateGui()
+    if not self.GuiObject then return end
+    self.GuiObject.Size = UDim2.new(1, 0, 0, Theme.HeaderHeight)
+    self.GuiObject.Text = self.Parent and self.Parent.Title or ""
+    self.GuiObject.TextSize = Theme.TextSize * 1.20 -- Slightly larger for headers
+    self.GuiObject.TextColor3 = Theme.TextColor
+    self.GuiObject.Font = Theme.Font
+    self.GuiObject.BorderSizePixel = 0
+    self.GuiObject.BackgroundColor3 = Theme.SecondaryColor
+    if self.Parent and self.Parent.Type == ElementType.Category then
+        self.GuiObject.TextSize = Theme.TextSize * 1.40 -- Even larger for category titles
+    end
+end
+
+-- EntryComponent: A container for individual UI elements like sliders, buttons within a section
+local EntryComponent = {}
+EntryComponent.__index = EntryComponent
+setmetatable(EntryComponent, BaseComponent)
+
+function EntryComponent:New(height)
+    local self = setmetatable(BaseComponent:New(ElementType.Entry), EntryComponent)
+    self.Value = nil
+    self.Height = height or Theme.DefaultEntryHeight
+    self.GuiObject = Instance.new("Frame")
+    return self
+end
+
+function EntryComponent:SetValue()
+    -- Placeholder
+end
+
+function EntryComponent:GetValue()
+    -- Placeholder
+end
+
+function EntryComponent:UpdateGui()
+    if not self.GuiObject then return end
+    self.GuiObject.BackgroundColor3 = Theme.PrimaryColor
+    self.GuiObject.BorderSizePixel = 0
+    self.GuiObject.Size = UDim2.new(1, 0, 0, self.Height)
+end
+
+-- ContainerComponent: Base for collapsable UI groups (Sections and Categories)
+local ContainerComponent = {}
+ContainerComponent.__index = ContainerComponent
+setmetatable(ContainerComponent, BaseComponent)
+
+function ContainerComponent:New(title, type)
+    local self = setmetatable(BaseComponent:New(type), ContainerComponent)
+    self.Collapsed = false
+    self.Height = 0
+    self.GuiObject = Instance.new("Frame")
+    self.Header = HeaderComponent:New()
+    self.Title = title or ""
+    self:AddChild(self.Header)
+    return self
+end
+
+function ContainerComponent:UpdateGui()
+    if not self.GuiObject then return end
+    self.GuiObject.Size = UDim2.new(0, Theme.HeaderWidth, 0, 0) -- Initial height set by ReorderGui
+    self.GuiObject.BackgroundColor3 = Theme.SecondaryColor
+    self.GuiObject.BorderSizePixel = 0
+    self.GuiObject.ClipsDescendants = true
+    self:ReorderGui(true) -- true for instant update
+end
+
+function ContainerComponent:ReorderGui(instant)
+    instant = instant or false
+    local animationDuration = Theme.AnimationDuration
+    if instant then
+        animationDuration = 0
+    end
+
+    self.Height = Theme.HeaderHeight -- Start with header height
+
+    if not self.Collapsed then
+        for _, child in pairs(self.Children) do
+            if child.Type ~= ElementType.Header and child.GuiObject then
+                child.GuiObject:TweenPosition(
+                    UDim2.new(0, 0, 0, self.Height),
+                    Enum.EasingDirection.InOut,
+                    Theme.AnimationEasingStyle,
+                    animationDuration,
+                    true
+                )
+                self.Height = self.Height + child.Height + Theme.EntryMargin
+            end
+        end
+        if #self.Children > 1 then -- Has more than just the header
+             self.Height = self.Height - Theme.EntryMargin -- Remove last margin
+        end
+    end
+
+    if self.GuiObject then
+        self.GuiObject:TweenSize(
+            UDim2.new(0, Theme.HeaderWidth, 0, self.Height),
+            Enum.EasingDirection.InOut,
+            Theme.AnimationEasingStyle,
+            animationDuration,
+            true
+        )
+    end
+
+    if self.Parent and self.Parent.Type ~= ElementType.Root and self.Parent.ReorderGui then
+        self.Parent:ReorderGui(instant)
+    end
+end
+
+function ContainerComponent:Collapse()
+    self.Collapsed = true
+    self.Header.CollapseButton:Collapse()
+    self:ReorderGui()
+end
+
+function ContainerComponent:Expand()
+    self.Collapsed = false
+    self.Header.CollapseButton:Expand()
+    self:ReorderGui()
+end
+
+function ContainerComponent:AddEntry(entry)
+    self:AddChild(entry)
+    entry:RecursiveUpdateGui()
+    self:ReorderGui(true) -- true for instant update
+end
+
+-- SectionComponent: A collapsable group of entries within a Category
+local SectionComponent = {}
+SectionComponent.__index = SectionComponent
+setmetatable(SectionComponent, ContainerComponent)
+
+function SectionComponent:New(title)
+    local self = setmetatable(ContainerComponent:New(title, ElementType.Section), SectionComponent)
+    return self
+end
+
+function ContainerComponent:CreateSection(title)
+    local section = SectionComponent:New(title)
+    self:AddChild(section)
+    section:RecursiveUpdateGui()
+    return section
+end
+
+-- CategoryComponent: A draggable, collapsable top-level container
+local CategoryComponent = {}
+CategoryComponent.__index = CategoryComponent
+setmetatable(CategoryComponent, ContainerComponent)
+
+function CategoryComponent:New(title, draggable)
+    local self = setmetatable(ContainerComponent:New(title, ElementType.Category), CategoryComponent)
+    self.Draggable = draggable or true
+    self.Position = UDim2.new(0, 0, 0, 0)
+    self:ApplyDraggability()
+    return self
+end
+
+function CategoryComponent:MoveTo(newPosition)
+    self.Position = newPosition
+    if self.GuiObject then
+        self.GuiObject.Position = newPosition
+    end
+end
+
+function CategoryComponent:AutoMove()
+    local numCategories = 0
+    if self.Parent and self.Parent.Children then
+        for _, child in ipairs(self.Parent.Children) do
+            if child.Type == ElementType.Category then
+                numCategories = numCategories + 1
+            end
+        end
+    end
+    self:MoveTo(UDim2.fromOffset(20 + (numCategories - 1) * (Theme.HeaderWidth * 1.1), 20))
+end
+
+
+function CategoryComponent:ApplyDraggability()
+    if not self.Header or not self.Header.GuiObject then return end
+
+    self.LastMousePosition = UserInputService:GetMouseLocation()
+    self.DragActive = false
+
+    self.Header.GuiObject.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 and self.Draggable then
+            self.DragActive = true
+            self.LastMousePosition = UserInputService:GetMouseLocation() -- Update right before drag
+        end
+    end)
+
+    self.Header.GuiObject.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            self.DragActive = false
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement then
+            if self.DragActive and self.GuiObject then
+                local currentMousePosition = UserInputService:GetMouseLocation()
+                local delta = currentMousePosition - self.LastMousePosition
+                self:MoveTo(UDim2.new(
+                    self.GuiObject.Position.X.Scale,
+                    self.GuiObject.Position.X.Offset + delta.X,
+                    self.GuiObject.Position.Y.Scale,
+                    self.GuiObject.Position.Y.Offset + delta.Y
+                ))
+            end
+            self.LastMousePosition = UserInputService:GetMouseLocation()
+        end
+    end)
+end
+
+-- ButtonElement: A simple clickable button
+local ButtonElement = {}
+ButtonElement.__index = ButtonElement
+setmetatable(ButtonElement, BaseUiElement)
+
+function ButtonElement:New(size, position, title, callback)
+    local self = setmetatable(BaseUiElement:New(size, position, title), ButtonElement)
+    self.Callback = callback
+    self.GuiObject = Instance.new("TextButton")
+    if self.Callback then
+        self.GuiObject.MouseButton1Click:Connect(self.Callback)
+    end
+    return self
+end
+
+function ButtonElement:UpdateGui()
+    if not self.GuiObject then return end
+    self.GuiObject.BorderSizePixel = 0
+    self.GuiObject.BackgroundColor3 = Theme.SecondaryColor
+    self.GuiObject.TextColor3 = Theme.TextColor
+    self.GuiObject.Size = self.Size
+    self.GuiObject.Position = self.Position
+    self.GuiObject.Text = self.Title
+    self.GuiObject.TextSize = Theme.TextSize
+    self.GuiObject.Font = Theme.Font
+    self.GuiObject.AutoButtonColor = false -- For better hover/pressed state control if needed later
+end
+
+function ContainerComponent:CreateButton(title, callback)
+    local entry = EntryComponent:New() -- Uses default height
+    local button = ButtonElement:New(UDim2.new(1, -10, 1, -10), UDim2.new(0, 5, 0, 5), title, callback)
+    entry:AddChild(button)
+    self:AddEntry(entry)
+    return entry -- Or return button, depending on what you want to control
+end
+
+-- SliderElement: A draggable slider for selecting a numerical value
+local SliderElement = {}
+SliderElement.__index = SliderElement
+setmetatable(SliderElement, BaseUiElement)
+
+function SliderElement:New(size, position, title, callback, minVal, maxVal, stepVal, dynamic, initialValue, customColor)
+    local self = setmetatable(BaseUiElement:New(size, position, title), SliderElement)
+    self.Callback = callback or function() end
+    self.Dynamic = dynamic or false
+    self.Step = stepVal or 0.01
+    self.Max = maxVal or 100
+    self.Min = minVal or 0
+    self.CustomColor = customColor
+    self.Value = initialValue or self.Min
+
+    self.GuiObject = Instance.new("Frame")
+    self.Bg = Instance.new("Frame", self.GuiObject)
+    self.Box = Instance.new("TextBox", self.GuiObject)
+    self.Overlay = Instance.new("Frame", self.Bg)
+    self.Handle = Instance.new("Frame", self.Overlay) -- Handle is child of Overlay for positioning
+    self.Label = Instance.new("TextLabel", self.Bg)
+    self.Active = false
+
+    self.Bg.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            self.Active = true
+            local relativeX = math.clamp(input.Position.X - self.Bg.AbsolutePosition.X, 0, self.Bg.AbsoluteSize.X)
+            local percentage = relativeX / self.Bg.AbsoluteSize.X
+            self:SetValue(self.Min + (percentage * (self.Max - self.Min)))
+            if self.Dynamic then self.Callback(self.Value) end -- Fire on initial click if dynamic
+        end
+    end)
+
+    self.Bg.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            if self.Active then -- Only fire callback if it was an active drag/click on this slider
+                self.Active = false
+                self.Callback(self.Value)
+            end
+        end
+    end)
+    
+    -- Global mouse up for safety, in case mouse released outside Bg
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            if self.Active then -- If slider was active
+                self.Active = false
+                self.Callback(self.Value) -- Fire callback as drag ended
+            end
+        end
+    end)
+
+
+    UserInputService.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement then
+            if self.Active then
+                local relativeX = math.clamp(input.Position.X - self.Bg.AbsolutePosition.X, 0, self.Bg.AbsoluteSize.X)
+                local percentage = relativeX / self.Bg.AbsoluteSize.X
+                self:SetValue(self.Min + (percentage * (self.Max - self.Min)))
+                if self.Dynamic then
+                    self.Callback(self.Value)
+                end
+            end
+        end
+    end)
+
+    self.Box.FocusLost:Connect(function(enterPressed)
+        local num = tonumber(self.Box.Text)
+        if num then
+            self:SetValue(num)
+            self.Callback(self.Value)
+        else
+            self.Box.Text = tostring(self.Value)
+        end
+    end)
+    return self
+end
+
+function SliderElement:SetValue(newValue)
+    local rawValue = math.clamp(newValue, self.Min, self.Max)
+    self.Value = rawValue - (rawValue % self.Step) -- Apply step
+    self.Value = math.clamp(self.Value, self.Min, self.Max) -- Re-clamp after step
+
+    if self.Overlay and self.Max > self.Min then
+        local percentage = (self.Value - self.Min) / (self.Max - self.Min)
+        self.Overlay.Size = UDim2.new(percentage, 0, 1, 0)
+    elseif self.Overlay then
+         self.Overlay.Size = UDim2.new(0, 0, 1, 0) -- Default if Min == Max
+    end
+    if self.Box then self.Box.Text = string.format("%.*f", self.Step < 1 and string.len(tostring(self.Step)) - 2 or 0, self.Value) end
+end
+
+
+function SliderElement:UpdateGui()
+    if not self.GuiObject then return end
+    self.GuiObject.BackgroundColor3 = Theme.SecondaryColor
+    self.GuiObject.Size = self.Size
+    self.GuiObject.Position = self.Position
+    self.GuiObject.BorderSizePixel = 0
+    self.GuiObject.BackgroundTransparency = 1 -- Main frame is transparent
+
+    self.Bg.BorderSizePixel = 0
+    self.Bg.Size = UDim2.new(1 - 0.25, 0, 1, 0) -- Slider bar part, 75% width
+    self.Bg.Position = UDim2.new(0,0,0,0)
+    self.Bg.BackgroundColor3 = Theme.SecondaryColor
+
+    self.Box.Size = UDim2.new(0.25, -5, 1, 0) -- Textbox part, 25% width with margin
+    self.Box.Position = UDim2.new(0.75, 5, 0, 0)
+    self.Box.BorderSizePixel = 0
+    self.Box.BackgroundColor3 = Theme.SecondaryColor
+    self.Box.TextColor3 = Theme.TextColor
+    self.Box.TextWrapped = true
+    self.Box.Font = Theme.Font
+    self.Box.TextSize = Theme.TextSize
+    self.Box.ClearTextOnFocus = false
+
+    self.Overlay.BorderSizePixel = 0
+    self.Overlay.BackgroundColor3 = self.CustomColor or Theme.AccentColor
+
+    self.Handle.Size = UDim2.new(0, 4, 1, 0) -- Handle width 4px
+    self.Handle.Position = UDim2.new(1, -(4 / 2), 0, 0) -- Centered on the edge of overlay
+    self.Handle.BackgroundColor3 = Color3.new(1, 1, 1)
+    self.Handle.BorderSizePixel = 0
+    self.Handle.ZIndex = 2 -- Above Overlay
+
+    self.Label.Text = self.Title
+    self.Label.Font = Theme.Font
+    self.Label.TextSize = Theme.TextSize * 0.9 -- Slightly smaller for label inside slider
+    self.Label.TextXAlignment = Enum.TextXAlignment.Left
+    self.Label.TextYAlignment = Enum.TextYAlignment.Center
+    self.Label.BackgroundTransparency = 1
+    self.Label.Size = UDim2.new(1, -10, 1, 0) -- Take full width of Bg, with padding
+    self.Label.Position = UDim2.new(0,5,0,0)
+    self.Label.TextColor3 = Theme.TextColor
+    self.Label.ZIndex = 3 -- Above Handle and Overlay
+
+    self:SetValue(self.Value) -- Initialize display
+end
+
+-- SliderEntry: An EntryComponent that hosts a SliderElement
+local SliderEntry = {}
+SliderEntry.__index = SliderEntry
+setmetatable(SliderEntry, EntryComponent)
+
+function SliderEntry:New(title, callback, minVal, maxVal, stepVal, dynamic, initialValue, customColor)
+    local self = setmetatable(EntryComponent:New(), SliderEntry) -- Default height
+    self.Slider = SliderElement:New(
+        UDim2.new(1, -10, 1, -10), -- Size relative to entry, with padding
+        UDim2.new(0, 5, 0, 5),    -- Position relative to entry, with padding
+        title, callback, minVal, maxVal, stepVal, dynamic, initialValue, customColor
+    )
+    self:AddChild(self.Slider)
+    self:SetValue(initialValue or self.Slider:GetValue()) -- Ensure entry's value matches slider's initial
+    return self
+end
+
+function SliderEntry:SetValue(newValue)
+    self.Value = newValue
+    self.Slider:SetValue(newValue)
+end
+
+function SliderEntry:GetValue()
+    return self.Slider:GetValue()
+end
+
+function ContainerComponent:CreateSlider(title, callback, minVal, maxVal, stepVal, dynamic, initialValue, customColor)
+    local sliderEntry = SliderEntry:New(title, callback, minVal, maxVal, stepVal, dynamic, initialValue, customColor)
+    self:AddEntry(sliderEntry)
+    return sliderEntry
+end
+
+-- TextBoxElement: An input field for text
+local TextBoxElement = {}
+TextBoxElement.__index = TextBoxElement
+setmetatable(TextBoxElement, BaseUiElement)
+
+function TextBoxElement:New(size, position, placeholder, callback, acceptFormat, dynamic, initialValue)
+    local self = setmetatable(BaseUiElement:New(size, position, placeholder), TextBoxElement) -- Title used as placeholder
+    self.Callback = callback or function() end
+    self.Dynamic = dynamic or false
+    self.Value = initialValue or ""
+    self.AcceptFormat = acceptFormat or "^.*$" -- Default accepts any string
+
+    self.GuiObject = Instance.new("TextBox")
+    self.GuiObject.FocusLost:Connect(function(enterPressed)
+        if string.match(self.GuiObject.Text, self.AcceptFormat) then
+            self:SetValue(self.GuiObject.Text)
+            self.Callback(self.Value)
+        else
+            self.GuiObject.Text = self.Value -- Revert if format not matched
+        end
+    end)
+
+    self.GuiObject.Changed:Connect(function(property)
+        if self.Dynamic and property == "Text" and self.GuiObject:IsFocused() then
+            if string.match(self.GuiObject.Text, self.AcceptFormat) then
+                self:SetValue(self.GuiObject.Text) -- Set internal value but callback on FocusLost or if explicitly handled
+                -- Potentially call self.Callback(self.Value) here if truly live updates are needed,
+                -- but be wary of performance with complex AcceptFormat checks.
+            else
+                -- Could provide visual feedback for invalid dynamic input here
+            end
+        end
+    end)
+    return self
+end
+
+function TextBoxElement:SetValue(text)
+    self.Value = text
+    if self.GuiObject then
+        self.GuiObject.Text = text
+    end
+end
+
+function TextBoxElement:UpdateGui()
+    if not self.GuiObject then return end
+    self.GuiObject.BackgroundColor3 = Theme.SecondaryColor
+    self.GuiObject.TextColor3 = Theme.TextColor
+    self.GuiObject.PlaceholderText = self.Title -- Title is used as placeholder
+    self.GuiObject.PlaceholderColor3 = Theme.TextColor:Lerp(Theme.SecondaryColor, 0.5)
+    self.GuiObject.Position = self.Position
+    self.GuiObject.Size = self.Size
+    self.GuiObject.TextSize = Theme.TextSize
+    self.GuiObject.Font = Theme.Font
+    self.GuiObject.BorderSizePixel = 0
+    self.GuiObject.ClearTextOnFocus = false
+    self:SetValue(self.Value) -- Initialize display
+end
+
+-- TextBoxEntry: An EntryComponent that hosts a TextBoxElement
+local TextBoxEntry = {}
+TextBoxEntry.__index = TextBoxEntry
+setmetatable(TextBoxEntry, EntryComponent)
+
+function TextBoxEntry:New(placeholder, callback, acceptFormat, dynamic, initialValue)
+    local self = setmetatable(EntryComponent:New(), TextBoxEntry) -- Default height
+    self.TextBox = TextBoxElement:New(
+        UDim2.new(1, -10, 1, -10),
+        UDim2.new(0, 5, 0, 5),
+        placeholder, callback, acceptFormat, dynamic, initialValue
+    )
+    self:AddChild(self.TextBox)
+    self:SetValue(initialValue or self.TextBox:GetValue())
+    return self
+end
+
+function TextBoxEntry:SetValue(text)
+    self.Value = text
+    self.TextBox:SetValue(text)
+end
+
+function TextBoxEntry:GetValue()
+    return self.TextBox:GetValue()
+end
+
+function ContainerComponent:CreateTextBox(placeholder, callback, acceptFormat, dynamic, initialValue)
+    local textBoxEntry = TextBoxEntry:New(placeholder, callback, acceptFormat, dynamic, initialValue)
+    self:AddEntry(textBoxEntry)
+    return textBoxEntry
+end
+
+
+-- ColorPickerElement: For selecting a Color3 value
+local ColorPickerElement = {}
+ColorPickerElement.__index = ColorPickerElement
+setmetatable(ColorPickerElement, BaseUiElement)
+
+function ColorPickerElement:New(size, position, title, callback, dynamic, initialValue)
+    local self = setmetatable(BaseUiElement:New(size, position, title), ColorPickerElement)
+    self.Callback = callback or function() end
+    self.Dynamic = dynamic or false -- if true, callback fires as color changes, else on finalization
+    self.Value = initialValue or Theme.AccentColor
+
+    self.GuiObject = Instance.new("Frame") -- Main container for the picker parts
+    self.GuiObject.ClipsDescendants = true -- Important for layout
+
+    -- Color Saturation/Value Picker Image
+    self.ColorImg = Instance.new("ImageLabel", self.GuiObject)
+    self.ColorImg.Image = "rbxassetid://698052001" -- Hue spectrum gradient image
+    self.Cursor = Instance.new("Frame", self.ColorImg) -- Cursor on the S/V picker
+
+    local sliderWidthScale = 0.95
+    local sliderOffset = (1-sliderWidthScale)/2 * self.Size.X.Offset -- for centering sliders if X.Offset is primary
+    
+    -- RGB Sliders
+    self.RSlider = SliderElement:New(UDim2.new(sliderWidthScale, 0, 1/6, -2), UDim2.new((1-sliderWidthScale)/2, 0, 0/6, 2), "R", function(val) self:SetRGBValue("R", val/255) end, 0, 255, 1, true, self.Value.R*255, Color3.new(0.8,0.2,0.2))
+    self:AddChild(self.RSlider)
+    self.GSlider = SliderElement:New(UDim2.new(sliderWidthScale, 0, 1/6, -2), UDim2.new((1-sliderWidthScale)/2, 0, 1/6, 4), "G", function(val) self:SetRGBValue("G", val/255) end, 0, 255, 1, true, self.Value.G*255, Color3.new(0.2,0.8,0.2))
+    self:AddChild(self.GSlider)
+    self.BSlider = SliderElement:New(UDim2.new(sliderWidthScale, 0, 1/6, -2), UDim2.new((1-sliderWidthScale)/2, 0, 2/6, 6), "B", function(val) self:SetRGBValue("B", val/255) end, 0, 255, 1, true, self.Value.B*255, Color3.new(0.2,0.2,0.8))
+    self:AddChild(self.BSlider)
+
+    -- Hex Input Box
+    self.HexBox = TextBoxElement:New(UDim2.new(sliderWidthScale, 0, 1/6, -4), UDim2.new((1-sliderWidthScale)/2, 0, 3/6, 8), "Hex", function(hexString) self:SetHexValue(hexString) end, "^%x%x%x%x%x%x$", false) -- dynamic false for hex
+    self:AddChild(self.HexBox)
+
+    -- Hue Slider (using a regular slider and mapping its value to Hue)
+    self.HueSlider = SliderElement:New(UDim2.new(sliderWidthScale, 0, 1/6, -2), UDim2.new((1-sliderWidthScale)/2, 0, 4/6, 10),"Hue", function(val) local _, s, v = Color3.toHSV(self.Value); self:SetValue(Color3.fromHSV(val/360, s, v), true) end, 0, 360, 1, true, ({Color3.toHSV(self.Value)})[1]*360, Color3.new(0.75,0.75,0.75))
+    self:AddChild(self.HueSlider)
+    
+    -- Value/Brightness Slider (HSV's V component) - this was VSlider before, now Hue is separate. Let's make this Saturation.
+    self.SaturationSlider = SliderElement:New(UDim2.new(sliderWidthScale, 0, 1/6, -2), UDim2.new((1-sliderWidthScale)/2, 0, 5/6, 12),"Sat", function(val) local h, _, v = Color3.toHSV(self.Value); self:SetValue(Color3.fromHSV(h, val/100, v), true) end, 0, 100, 1, true, ({Color3.toHSV(self.Value)})[2]*100, Color3.new(0.6,0.6,0.6))
+    self:AddChild(self.SaturationSlider)
+
+
+    local function updateColorFromImage(inputOrMouseX, mouseY)
+        local absolutePickerPos = self.ColorImg.AbsolutePosition
+        local absolutePickerSize = self.ColorImg.AbsoluteSize
+        local localX, localY
+        if typeof(inputOrMouseX) == "Vector2" then -- from MouseMoved
+             localX = inputOrMouseX.X - absolutePickerPos.X
+             localY = inputOrMouseX.Y - absolutePickerPos.Y
+        else -- from InputBegan
+             localX = inputOrMouseX - absolutePickerPos.X
+             localY = mouseY - absolutePickerPos.Y
+        end
+
+        local saturation = math.clamp(localX / absolutePickerSize.X, 0, 1)
+        local value = math.clamp(1 - (localY / absolutePickerSize.Y), 0, 1) -- Y is inverted in UI
+        local hue = ({Color3.toHSV(self.Value)})[1] -- Keep current hue
+        
+        self:SetValue(Color3.fromHSV(hue, saturation, value), true)
+    end
+    
+    local imageDragging = false
+    self.ColorImg.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            imageDragging = true
+            updateColorFromImage(input.Position.X, input.Position.Y)
+        end
+    end)
+    
+    self.ColorImg.InputEnded:Connect(function(input)
+         if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            imageDragging = false
+            if not self.Dynamic then self.Callback(self.Value) end -- Final callback if not dynamic
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement and imageDragging then
+            -- GetMouseLocation is in screen space, need to adjust if GUI has inset
+            local mouseLocation = UserInputService:GetMouseLocation()
+            updateColorFromImage(mouseLocation)
+        end
+    end)
+    
+    self:SetValue(self.Value, false) -- Initial set without firing callback
+    return self
+end
+
+function ColorPickerElement:SetRGBValue(component, value)
+    local r, g, b = self.Value.R, self.Value.G, self.Value.B
+    if component == "R" then r = value elseif component == "G" then g = value elseif component == "B" then b = value end
+    self:SetValue(Color3.new(r,g,b), true)
+end
+
+function ColorPickerElement:SetHexValue(hexString)
+    local r = tonumber("0x" .. hexString:sub(1,2))
+    local g = tonumber("0x" .. hexString:sub(3,4))
+    local b = tonumber("0x" .. hexString:sub(5,6))
+    if r and g and b then
+        self:SetValue(Color3.fromRGB(r,g,b), true)
+    end
+end
+
+function ColorPickerElement:SetValue(newColor, fireCallback)
+    self.Value = newColor
+    local hue, saturation, val = Color3.toHSV(newColor)
+
+    if self.Cursor then
+        self.Cursor.Position = UDim2.new(saturation, -2, 1 - val, -2) -- -2 to center 4px cursor
+    end
+    
+    -- Update ColorImg based on Hue to show Saturation/Value plane
+    if self.ColorImg then
+        self.ColorImg.ImageColor3 = Color3.fromHSV(hue, 1, 1) -- Full saturation/value of the current hue
+    end
+
+    -- Update sliders without triggering their own callbacks to avoid loops
+    if self.RSlider and self.RSlider.Value ~= newColor.R*255 then self.RSlider:SetValue(newColor.R * 255) end
+    if self.GSlider and self.GSlider.Value ~= newColor.G*255 then self.GSlider:SetValue(newColor.G * 255) end
+    if self.BSlider and self.BSlider.Value ~= newColor.B*255 then self.BSlider:SetValue(newColor.B * 255) end
+    if self.HueSlider and self.HueSlider.Value ~= hue*360 then self.HueSlider:SetValue(hue * 360) end
+    if self.SaturationSlider and self.SaturationSlider.Value ~= saturation*100 then self.SaturationSlider:SetValue(saturation*100) end
+
+
+    if self.HexBox then
+        local currentHex = string.format("%02x%02x%02x", math.floor(newColor.R*255+.5), math.floor(newColor.G*255+.5), math.floor(newColor.B*255+.5))
+        if self.HexBox.Value ~= currentHex then self.HexBox:SetValue(currentHex) end
+    end
+
+    if fireCallback then -- (self.Dynamic or finalUpdate)
+        pcall(self.Callback, self.Value)
+    end
+end
+
+
+function ColorPickerElement:UpdateGui()
+    if not self.GuiObject then return end
+    self.GuiObject.Size = self.Size
+    self.GuiObject.Position = self.Position
+    self.GuiObject.BackgroundTransparency = 1 -- Main frame transparent
+
+    -- Color Saturation/Value Picker Image (top part)
+    self.ColorImg.Size = UDim2.new(0.95, 0, 0.4, -5) -- Top 40% of element height, 95% width
+    self.ColorImg.Position = UDim2.new(0.025, 0, 0, 5) -- Centered with top margin
+    self.ColorImg.BorderSizePixel = 1
+    self.ColorImg.BorderColor3 = Theme.SecondaryColor
+    self.ColorImg.BackgroundColor3 = Color3.fromRGB(128,128,128) -- Fallback bg
+
+    self.Cursor.Size = UDim2.new(0, 4, 0, 4)
+    self.Cursor.BorderSizePixel = 1
+    self.Cursor.BorderColor3 = Color3.new(0,0,0)
+    self.Cursor.BackgroundColor3 = Color3.new(1,1,1)
+    self.Cursor.ZIndex = self.ColorImg.ZIndex + 1
+    
+    -- Children (sliders, hexbox) are updated via their own UpdateGui calls
+    -- when :RecursiveUpdateGui is called on parent.
+    -- We need to adjust their positions based on ColorImg's height.
+    local slidersYStartOffset = self.ColorImg.Position.Y.Offset + self.ColorImg.Size.Y.Offset + 5 -- 5px margin
+    local sliderHeight = (self.Size.Y.Offset - slidersYStartOffset) / 6 -- Approximate height for 6 controls
+    
+    self.RSlider.Position = UDim2.new(0.025, 0, 0, slidersYStartOffset + (sliderHeight * 0))
+    self.GSlider.Position = UDim2.new(0.025, 0, 0, slidersYStartOffset + (sliderHeight * 1))
+    self.BSlider.Position = UDim2.new(0.025, 0, 0, slidersYStartOffset + (sliderHeight * 2))
+    self.HexBox.Position = UDim2.new(0.025, 0, 0, slidersYStartOffset + (sliderHeight * 3))
+    self.HueSlider.Position = UDim2.new(0.025, 0, 0, slidersYStartOffset + (sliderHeight * 4))
+    self.SaturationSlider.Position = UDim2.new(0.025, 0, 0, slidersYStartOffset + (sliderHeight * 5))
+
+    self.RSlider.Size = UDim2.new(0.95,0,0,sliderHeight-2)
+    self.GSlider.Size = UDim2.new(0.95,0,0,sliderHeight-2)
+    self.BSlider.Size = UDim2.new(0.95,0,0,sliderHeight-2)
+    self.HexBox.Size = UDim2.new(0.95,0,0,sliderHeight-4) -- textbox usually needs a bit more padding
+    self.HueSlider.Size = UDim2.new(0.95,0,0,sliderHeight-2)
+    self.SaturationSlider.Size = UDim2.new(0.95,0,0,sliderHeight-2)
+
+    self:SetValue(self.Value, false) -- Re-apply current value to update visuals
+end
+
+
+-- ColorPickerEntry: An EntryComponent that hosts a ColorPickerElement and manages its open/closed state
+local ColorPickerEntry = {}
+ColorPickerEntry.__index = ColorPickerEntry
+setmetatable(ColorPickerEntry, EntryComponent)
+
+function ColorPickerEntry:New(title, callback, dynamic, initialValue)
+    local self = setmetatable(EntryComponent:New(Theme.DefaultEntryHeight), ColorPickerEntry) -- Initial height
+    self.Title = title
+    self.Dynamic = dynamic
+    self.Callback = callback or function() end
+    self.Value = initialValue or Theme.AccentColor -- Store value here as well
+
+    self.Label = Instance.new("TextLabel", self.GuiObject)
+    self.ColorButton = Instance.new("TextButton", self.Label) -- Button showing current color
+    
+    -- The actual color picker element, initially not visible or positioned within flow
+    self.ColorPicker = ColorPickerElement:New(
+        UDim2.new(1, 0, 0, Theme.HeaderWidth / 1.5), -- Size of the picker when open
+        UDim2.new(0, 0, 0, Theme.DefaultEntryHeight), -- Positioned below the label when open
+        title,
+        function(newColorValue) -- Internal callback from ColorPickerElement
+            self.ColorButton.BackgroundColor3 = newColorValue
+            self.Value = newColorValue
+            if self.Dynamic and self.Toggled then -- Only call main callback if dynamic and open
+                pcall(self.Callback, newColorValue)
+            end
+        end,
+        dynamic,
+        self.Value
+    )
+    self:AddChild(self.ColorPicker) -- Add as child for GuiObject parenting and updates
+    self.ColorPicker.GuiObject.Visible = false -- Initially hidden
+
+    self.Toggled = false
+    self.ColorButton.MouseButton1Click:Connect(function()
+        self.Toggled = not self.Toggled
+        self.ColorPicker.GuiObject.Visible = self.Toggled
+        if self.Toggled then
+            self.Height = Theme.DefaultEntryHeight + (Theme.HeaderWidth / 1.5) + Theme.EntryMargin
+            self.ColorPicker:RecursiveUpdateGui() -- Ensure picker is updated when shown
+        else
+            self.Height = Theme.DefaultEntryHeight
+            pcall(self.Callback, self.Value) -- Final callback when closed
+        end
+        if self.GuiObject then
+            self.GuiObject:TweenSize(UDim2.new(1,0,0,self.Height), Enum.EasingDirection.InOut, Theme.AnimationEasingStyle, Theme.AnimationDuration, true)
+        end
+        if self.Parent and self.Parent.ReorderGui then
+            self.Parent:ReorderGui()
+        end
+    end)
+    
+    self:SetValue(self.Value) -- Set initial color
+    return self
+end
+
+function ColorPickerEntry:SetValue(newColor)
+    self.Value = newColor
+    if self.ColorPicker then self.ColorPicker:SetValue(newColor, false) end -- Update picker, don't fire its internal callback yet
+    if self.ColorButton then self.ColorButton.BackgroundColor3 = newColor end
+end
+
+function ColorPickerEntry:GetValue()
+    return self.Value
+end
+
+function ColorPickerEntry:UpdateGui()
+    -- Call base EntryComponent UpdateGui for its size and background
+    EntryComponent.UpdateGui(self) -- Updates self.GuiObject size based on self.Height
+    if not self.GuiObject then return end
+
+    self.GuiObject.ClipsDescendants = true -- Important for the expand/collapse effect
+    self.GuiObject.BackgroundColor3 = Theme.PrimaryColor
+    self.GuiObject.BorderSizePixel = 0
+    -- self.GuiObject.Size already set by EntryComponent.UpdateGui or tweening
+
+    self.Label.Size = UDim2.new(1, -5, 0, Theme.DefaultEntryHeight - 5)
+    self.Label.Position = UDim2.new(0, 5, 0, 2.5)
+    self.Label.BackgroundTransparency = 1
+    self.Label.Font = Theme.Font
+    self.Label.Text = self.Title
+    self.Label.TextXAlignment = Enum.TextXAlignment.Left
+    self.Label.TextColor3 = Theme.TextColor
+    self.Label.TextSize = Theme.TextSize
+
+    self.ColorButton.Size = UDim2.new(0, Theme.DefaultEntryHeight - 12, 0, Theme.DefaultEntryHeight - 12) -- Square button
+    self.ColorButton.Position = UDim2.new(1, -(Theme.DefaultEntryHeight - 12) -5 , 0.5, -(Theme.DefaultEntryHeight - 12)/2) -- Align right in label
+    self.ColorButton.Text = ""
+    self.ColorButton.AutoButtonColor = false
+    self.ColorButton.BorderSizePixel = 1
+    self.ColorButton.BorderColor3 = Theme.TextColor
+
+    -- ColorPicker itself is updated via RecursiveUpdateGui if it's a child
+    if self.Toggled and self.ColorPicker and self.ColorPicker.GuiObject then
+         self.ColorPicker.GuiObject.Visible = true
+         self.ColorPicker.GuiObject.Position = UDim2.new(0,0,0,Theme.DefaultEntryHeight + Theme.EntryMargin)
+    elseif self.ColorPicker and self.ColorPicker.GuiObject then
+         self.ColorPicker.GuiObject.Visible = false
+    end
+    self:SetValue(self.Value) -- Ensure color display is current
+end
+
+function ContainerComponent:CreateColorPicker(title, callback, dynamic, initialValue)
+    local colorPickerEntry = ColorPickerEntry:New(title, callback, dynamic, initialValue)
+    self:AddEntry(colorPickerEntry)
+    -- colorPickerEntry:RecursiveUpdateGui() -- UpdateGui on AddEntry already calls this.
+    return colorPickerEntry
+end
+
+-- Helper function for SelectorElement search
+local function filterListBySearchTerm(list, searchTerm)
+    local filtered = {}
+    if not searchTerm or searchTerm == "" then return list end -- Return all if no search term
+    searchTerm = string.lower(tostring(searchTerm))
+    for _, item in pairs(list) do
+        if string.match(string.lower(tostring(item)), searchTerm) then
+            table.insert(filtered, item)
+        end
+    end
+    return filtered
+end
+
+-- SelectorElement: A dropdown-like list with search functionality
+local SelectorElement = {}
+SelectorElement.__index = SelectorElement
+setmetatable(SelectorElement, BaseUiElement)
+
+function SelectorElement:New(size, position, title, callback, getFullListFunc)
+    local self = setmetatable(BaseUiElement:New(size, position, title), SelectorElement) -- Title not directly used here
+    self.Callback = callback or function() end
+    self.GetFullListFunc = getFullListFunc or function() return {} end
+
+    self.GuiObject = Instance.new("Frame") -- Main container for search and scroll
+    self.ScrollBox = Instance.new("ScrollingFrame", self.GuiObject)
+    self.SearchBox = TextBoxElement:New(
+        UDim2.new(1, 0, 0, Theme.DefaultEntryHeight - 5), -- Slightly less than default entry height for search bar
+        UDim2.new(0, 0, 0, 0),
+        "Search...",
+        function(searchTerm) -- Callback for search box itself
+            self:SetList(filterListBySearchTerm(self.GetFullListFunc(), searchTerm))
+        end,
+        nil, -- No specific accept format
+        true -- Dynamic update of list
+    )
+    self:AddChild(self.SearchBox) -- Add search box as a child of this element
+    return self
+end
+
+function SelectorElement:SetList(itemList)
+    if not self.ScrollBox then return end
+    self.ScrollBox:ClearAllChildren()
+    local yOffset = 0
+    local itemHeight = Theme.DefaultEntryHeight - 8 -- Height for items in list
+    for i, itemData in ipairs(itemList) do
+        local itemButton = Instance.new("TextButton", self.ScrollBox)
+        itemButton.Text = tostring(itemData)
+        itemButton.BackgroundColor3 = Theme.SecondaryColor
+        itemButton.TextColor3 = Theme.TextColor
+        itemButton.BorderColor3 = Theme.PrimaryColor -- Or Theme.AccentColor for selection highlight
+        itemButton.Size = UDim2.new(1, -4, 0, itemHeight)
+        itemButton.Position = UDim2.new(0, 2, 0, yOffset)
+        itemButton.Font = Theme.Font
+        itemButton.TextSize = Theme.TextSize * 0.9
+        itemButton.AutoButtonColor = false
+
+        itemButton.MouseButton1Click:Connect(function()
+            self.Callback(itemData)
+            -- Optionally, refresh list if GetFullListFunc might change or filter needs reset
+            -- self:SetList(filterListBySearchTerm(self.GetFullListFunc(), self.SearchBox:GetValue()))
+        end)
+        yOffset = yOffset + itemHeight + 2 -- 2px spacing
+    end
+    self.ScrollBox.CanvasSize = UDim2.new(0, 0, 0, yOffset)
+end
+
+
+function SelectorElement:UpdateGui()
+    if not self.GuiObject then return end
+    self.GuiObject.BorderSizePixel = 0
+    self.GuiObject.BackgroundTransparency = 1 -- Main frame transparent
+    self.GuiObject.Size = self.Size
+    self.GuiObject.Position = self.Position
+
+    -- SearchBox is a child and its UpdateGui will be called via RecursiveUpdateGui.
+    -- We just need to position the ScrollBox below the SearchBox.
+    local searchBoxHeight = self.SearchBox.Size.Y.Offset
+    self.ScrollBox.Position = UDim2.new(0, 0, 0, searchBoxHeight + 2) -- 2px margin
+    self.ScrollBox.Size = UDim2.new(1, 0, 1, -(searchBoxHeight + 2))
+    self.ScrollBox.BackgroundTransparency = 1
+    self.ScrollBox.BorderSizePixel = 0
+    self.ScrollBox.ScrollBarThickness = 6
+    self.ScrollBox.ScrollBarImageColor3 = Theme.AccentColor
+
+    self:SetList(filterListBySearchTerm(self.GetFullListFunc(), self.SearchBox:GetValue())) -- Initial population or refresh
+end
+
+-- SelectorEntry: An EntryComponent that hosts a SelectorElement, managing its toggle state
+local SelectorEntry = {}
+SelectorEntry.__index = SelectorEntry
+setmetatable(SelectorEntry, EntryComponent)
+
+function SelectorEntry:New(title, callback, getFullListFunc, initialValue)
+    local self = setmetatable(EntryComponent:New(Theme.DefaultEntryHeight), SelectorEntry) -- Start with default height
+    self.Title = title
+    self.Callback = callback or function() end
+    self.Value = initialValue -- Store the selected value
+
+    -- The button that displays current selection and toggles the list
+    self.Button = Instance.new("TextButton", self.GuiObject)
+    self.Indicator = Instance.new("TextLabel", self.Button) -- Arrow indicator
+    self.Indicator.Text = "▼"
+
+    -- The selector element itself (search box + scrolling list)
+    self.Selector = SelectorElement:New(
+        UDim2.new(1, 0, 0, Theme.DefaultEntryHeight * 4), -- Height of the dropdown part
+        UDim2.new(0, 0, 0, Theme.DefaultEntryHeight),   -- Positioned below the button when open
+        title, -- Not directly used by SelectorElement's visuals
+        function(selectedValue) -- Callback from SelectorElement when an item is picked
+            if not UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then -- Hold shift to multi-select (conceptual) or keep open
+                self:Toggle()
+            end
+            self:SetValue(selectedValue) -- Update display and internal value
+            self.Callback(selectedValue) -- Call the main user callback
+        end,
+        getFullListFunc
+    )
+    self:AddChild(self.Selector)
+    self.Selector.GuiObject.Visible = false -- Initially hidden
+
+    self.Toggled = false
+    self.Button.MouseButton1Click:Connect(function()
+        self:Toggle()
+        if self.Toggled then -- If opening, refresh the list
+            self.Selector:SetList(filterListBySearchTerm(self.Selector.GetFullListFunc(), self.Selector.SearchBox:GetValue()))
+        end
+    end)
+    
+    self:SetValue(initialValue) -- Set initial display
+    return self
+end
+
+function SelectorEntry:Toggle()
+    self.Toggled = not self.Toggled
+    self.Selector.GuiObject.Visible = self.Toggled
+
+    if self.Toggled then
+        self.Height = Theme.DefaultEntryHeight + (Theme.DefaultEntryHeight * 4) + Theme.EntryMargin -- Button height + selector height
+        self.Indicator.Text = "▲"
+    else
+        self.Height = Theme.DefaultEntryHeight
+        self.Indicator.Text = "▼"
+    end
+
+    if self.GuiObject then
+        self.GuiObject:TweenSize(UDim2.new(1,0,0,self.Height), Enum.EasingDirection.InOut, Theme.AnimationEasingStyle, Theme.AnimationDuration, true)
+    end
+    if self.Parent and self.Parent.ReorderGui then
+        self.Parent:ReorderGui()
+    end
+end
+
+function SelectorEntry:SetValue(newValue)
+    self.Value = newValue
+    if self.Button then
+        local displayValue = newValue
+        if typeof(newValue) == "Instance" then displayValue = newValue.Name end -- Common case for Roblox instances
+        self.Button.Text = string.format("%s: %s", self.Title, tostring(displayValue or "Empty"))
+    end
+end
+
+function SelectorEntry:GetValue()
+    return self.Value
+end
+
+function SelectorEntry:UpdateGui()
+    EntryComponent.UpdateGui(self) -- Handles main GuiObject size and background
+    if not self.GuiObject then return end
+
+    self.GuiObject.ClipsDescendants = true
+    self.GuiObject.BackgroundColor3 = Theme.PrimaryColor
+    self.GuiObject.BorderSizePixel = 0
+
+    self.Button.Position = UDim2.new(0, 5, 0, 5)
+    self.Button.Size = UDim2.new(1, -10, 0, Theme.DefaultEntryHeight - 10)
+    self.Button.BorderSizePixel = 0
+    self.Button.Font = Theme.Font
+    self.Button.TextSize = Theme.TextSize
+    self.Button.BackgroundColor3 = Theme.SecondaryColor
+    self.Button.TextColor3 = Theme.TextColor
+    self.Button.AutoButtonColor = false
+    self.Button.TextXAlignment = Enum.TextXAlignment.Left
+
+    self.Indicator.Size = UDim2.new(0, 20, 1, 0)
+    self.Indicator.Position = UDim2.new(1, -25, 0, 0) -- Positioned to the right of the button text
+    self.Indicator.BackgroundTransparency = 1
+    self.Indicator.TextColor3 = Theme.TextColor
+    self.Indicator.Font = Theme.Font
+    self.Indicator.TextSize = Theme.TextSize * 1.2
+
+    if self.Toggled and self.Selector and self.Selector.GuiObject then
+        self.Selector.GuiObject.Visible = true
+        self.Selector.GuiObject.Position = UDim2.new(0,0,0,Theme.DefaultEntryHeight + Theme.EntryMargin)
+    elseif self.Selector and self.Selector.GuiObject then
+        self.Selector.GuiObject.Visible = false
+    end
+
+    self:SetValue(self.Value) -- Update button text
+end
+
+function ContainerComponent:CreateSelector(title, callback, getFullListFunc, initialValue)
+    local selectorEntry = SelectorEntry:New(title, callback, getFullListFunc, initialValue)
+    self:AddEntry(selectorEntry)
+    return selectorEntry
+end
+
+-- SwitchElement: A toggle switch (on/off)
+local SwitchElement = {}
+SwitchElement.__index = SwitchElement
+setmetatable(SwitchElement, BaseUiElement)
+
+function SwitchElement:New(size, position, title, callback, initialValue)
+    local self = setmetatable(BaseUiElement:New(size, position, title), SwitchElement)
+    self.Callback = callback or function() end
+    self.Value = initialValue or false
+
+    self.GuiObject = Instance.new("Frame") -- Container for label and button
+    self.Label = Instance.new("TextLabel", self.GuiObject)
+    self.Button = Instance.new("TextButton", self.GuiObject) -- The clickable switch part
+
+    self.Button.MouseButton1Click:Connect(function()
+        self:SetValue(not self.Value)
+        self.Callback(self.Value)
+    end)
+    return self
+end
+
+function SwitchElement:SetValue(isOn)
+    self.Value = isOn
+    if self.Button then
+        if self.Value then
+            self.Button.BackgroundColor3 = Theme.AccentColor
+        else
+            self.Button.BackgroundColor3 = Theme.SecondaryColor:Lerp(Color3.new(0,0,0), 0.3) -- Darker secondary when off
+        end
+    end
+end
+
+function SwitchElement:UpdateGui()
+    if not self.GuiObject then return end
+    self.GuiObject.Size = self.Size
+    self.GuiObject.BackgroundTransparency = 1
+    self.GuiObject.Position = self.Position
+
+    self.Label.Text = self.Title
+    self.Label.TextSize = Theme.TextSize
+    self.Label.Font = Theme.Font
+    self.Label.BackgroundTransparency = 1
+    self.Label.Size = UDim2.new(0.8, -5, 1, 0) -- 80% width for label, with margin for button
+    self.Label.Position = UDim2.new(0,0,0,0)
+    self.Label.TextColor3 = Theme.TextColor
+    self.Label.TextXAlignment = Enum.TextXAlignment.Left
+
+    local buttonSize = Theme.DefaultEntryHeight * 0.6
+    self.Button.Size = UDim2.new(0, buttonSize * 1.5, 0, buttonSize) -- Rectangular switch
+    self.Button.BorderSizePixel = 1
+    self.Button.BorderColor3 = Theme.TextColor:Lerp(Theme.SecondaryColor, 0.7)
+    self.Button.Position = UDim2.new(1, -buttonSize*1.5 -5 , 0.5, -buttonSize/2) -- Position to the right of label
+    self.Button.Text = ""
+    self.Button.AutoButtonColor = false
+    
+    self:SetValue(self.Value) -- Initialize visual state
+end
+
+-- SwitchEntry: An EntryComponent that hosts a SwitchElement
+local SwitchEntry = {}
+SwitchEntry.__index = SwitchEntry
+setmetatable(SwitchEntry, EntryComponent)
+
+function SwitchEntry:New(title, callback, initialValue)
+    local self = setmetatable(EntryComponent:New(), SwitchEntry) -- Default height
+    self.Switch = SwitchElement:New(
+        UDim2.new(1, -10, 1, -10),
+        UDim2.new(0, 5, 0, 5),
+        title, callback, initialValue
+    )
+    self:AddChild(self.Switch)
+    self:SetValue(initialValue or self.Switch:GetValue())
+    return self
+end
+
+function SwitchEntry:SetValue(isOn)
+    self.Value = isOn
+    self.Switch:SetValue(isOn)
+end
+
+function SwitchEntry:GetValue()
+    return self.Switch:GetValue()
+end
+
+function ContainerComponent:CreateSwitch(title, callback, initialValue)
+    local switchEntry = SwitchEntry:New(title, callback, initialValue)
+    self:AddEntry(switchEntry)
+    return switchEntry
+end
+
+-- TextLabelElement: A simple non-interactive text display
+local TextLabelElement = {}
+TextLabelElement.__index = TextLabelElement
+setmetatable(TextLabelElement, BaseUiElement)
+
+function TextLabelElement:New(size, position, text)
+    local self = setmetatable(BaseUiElement:New(size, position, text), TextLabelElement) -- Title is the text
+    self.GuiObject = Instance.new("TextLabel")
+    return self
+end
+
+function TextLabelElement:UpdateGui()
+    if not self.GuiObject then return end
+    self.GuiObject.BorderSizePixel = 0
+    self.GuiObject.BackgroundTransparency = 1
+    self.GuiObject.TextColor3 = Theme.TextColor
+    self.GuiObject.Size = self.Size
+    self.GuiObject.Position = self.Position
+    self.GuiObject.Text = self.Title
+    self.GuiObject.TextSize = Theme.TextSize
+    self.GuiObject.Font = Theme.Font
+    self.GuiObject.TextWrapped = true
+    self.GuiObject.TextXAlignment = Enum.TextXAlignment.Left
+    self.GuiObject.TextYAlignment = Enum.TextYAlignment.Center
+end
+
+function ContainerComponent:CreateTextLabel(text)
+    local entry = EntryComponent:New() -- Default height, can be adjusted if needed
+    local labelElement = TextLabelElement:New(UDim2.new(1, -10, 1, -10), UDim2.new(0, 5, 0, 5), text)
+    entry:AddChild(labelElement)
+    self:AddEntry(entry)
+    -- Adjust entry height based on text content if multi-line (more complex, not implemented here)
+    -- For now, it assumes single line or fits within DefaultEntryHeight.
+    return entry
+end
+
+-- KeyDetectorElement: For capturing a key press
+local KeyDetectorElement = {}
+KeyDetectorElement.__index = KeyDetectorElement
+setmetatable(KeyDetectorElement, BaseUiElement)
+
+function KeyDetectorElement:New(size, position, title, callback, initialValue)
+    local self = setmetatable(BaseUiElement:New(size, position, title), KeyDetectorElement)
+    self.Callback = callback or function() end
+    self.Value = initialValue or Enum.KeyCode.Unknown
+
+    self.GuiObject = Instance.new("Frame") -- Container
+    self.Label = Instance.new("TextLabel", self.GuiObject)
+    self.Button = Instance.new("TextButton", self.GuiObject) -- Button to initiate key capture
+
+    self.Button.MouseButton1Click:Connect(function()
+        self.Button.Text = "..."
+        local inputObject
+        local connection
+        connection = UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+            if not gameProcessedEvent and input.UserInputType == Enum.UserInputType.Keyboard then
+                self:SetValue(input.KeyCode)
+                self.Callback(self.Value)
+                if connection then connection:Disconnect() connection = nil end
+            elseif not gameProcessedEvent and input.UserInputType == Enum.UserInputType.MouseButton1 then
+                -- If user clicks away, cancel capture
+                self.Button.Text = self.Value.Name -- Revert to current key
+                if connection then connection:Disconnect() connection = nil end
+            end
+        end)
+    end)
+    return self
+end
+
+function KeyDetectorElement:SetValue(keyCode)
+    self.Value = keyCode
+    if self.Button then
+        self.Button.Text = keyCode.Name
+    end
+end
+
+function KeyDetectorElement:UpdateGui()
+    if not self.GuiObject then return end
+    self.GuiObject.BackgroundTransparency = 1
+    self.GuiObject.Size = self.Size
+    self.GuiObject.Position = self.Position
+
+    self.Label.Size = UDim2.new(0.7, -5, 1, 0) -- 70% for label
+    self.Label.BackgroundTransparency = 1
+    self.Label.TextSize = Theme.TextSize
+    self.Label.Text = self.Title
+    self.Label.Font = Theme.Font
+    self.Label.TextColor3 = Theme.TextColor
+    self.Label.TextXAlignment = Enum.TextXAlignment.Left
+
+    self.Button.Size = UDim2.new(0.3, 0, 1, 0) -- 30% for button
+    self.Button.BorderSizePixel = 0
+    self.Button.TextColor3 = Theme.TextColor
+    self.Button.BackgroundColor3 = Theme.SecondaryColor
+    self.Button.Position = UDim2.new(0.7, 5, 0, 0) -- Positioned to the right of label
+    self.Button.Font = Theme.Font
+    self.Button.TextSize = Theme.TextSize
+    self.Button.AutoButtonColor = false
+    
+    self:SetValue(self.Value) -- Initialize display
+end
+
+-- KeyDetectorEntry: An EntryComponent that hosts a KeyDetectorElement
+local KeyDetectorEntry = {}
+KeyDetectorEntry.__index = KeyDetectorEntry
+setmetatable(KeyDetectorEntry, EntryComponent)
+
+function KeyDetectorEntry:New(title, callback, initialValue)
+    local self = setmetatable(EntryComponent:New(), KeyDetectorEntry) -- Default height
+    self.KeyDetector = KeyDetectorElement:New(
+        UDim2.new(1, -10, 1, -10),
+        UDim2.new(0, 5, 0, 5),
+        title, callback, initialValue
+    )
+    self:AddChild(self.KeyDetector)
+    self:SetValue(initialValue or self.KeyDetector:GetValue())
+    return self
+end
+
+function KeyDetectorEntry:SetValue(keyCode)
+    self.Value = keyCode
+    self.KeyDetector:SetValue(keyCode)
+end
+
+function KeyDetectorEntry:GetValue()
+    return self.KeyDetector:GetValue()
+end
+
+function ContainerComponent:CreateKeyDetector(title, callback, initialValue)
+    local keyDetectorEntry = KeyDetectorEntry:New(title, callback, initialValue)
+    self:AddEntry(keyDetectorEntry)
+    return keyDetectorEntry
+end
+
+
+-- RootComponent: The main ScreenGui and top-level frame for the entire UI
+local RootComponent = {}
+RootComponent.__index = RootComponent
+setmetatable(RootComponent, BaseComponent)
+
+function RootComponent:New(parentGui)
+    local self = setmetatable(BaseComponent:New(ElementType.Root), RootComponent)
+    local targetParent = parentGui or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+    self.ScreenGui = Instance.new("ScreenGui", targetParent)
+    self.GuiObject = Instance.new("Frame", self.ScreenGui) -- Main frame to hold categories
+    return self
+end
+
+function RootComponent:UpdateGui()
+    if not self.ScreenGui or not self.GuiObject then return end
+    self.ScreenGui.ResetOnSpawn = false
+    self.ScreenGui.IgnoreGuiInset = true
+    self.ScreenGui.DisplayOrder = 1000 -- Ensure it's on top of most game UI
+    self.GuiObject.Size = UDim2.new(1, 0, 1, 0)
+    self.GuiObject.BackgroundTransparency = 1 -- Root frame is transparent
+end
+
+function RootComponent:Hide()
+    if self.ScreenGui then self.ScreenGui.Enabled = false end
+end
+
+function RootComponent:Show()
+    if self.ScreenGui then self.ScreenGui.Enabled = true end
+end
+
+function RootComponent:CleanUp()
+    if self.ScreenGui then self.ScreenGui:Destroy() end
+    -- self = nil -- Lua garbage collection handles this; explicit nil doesn't do much here.
+end
+
+function RootComponent:CreateCategory(title, draggable, positionOverride)
+    local category = CategoryComponent:New(title, draggable)
+    self:AddChild(category)
+    if positionOverride then
+        category:MoveTo(positionOverride)
+    else
+        category:AutoMove()
+    end
+    category:RecursiveUpdateGui() -- Update visuals of new category and its children (header)
+    return category
+end
+
+function RootComponent:LoadConfig(configTable)
+    if type(configTable) == "table" then
+        for key, value in pairs(configTable) do
+            if Theme[key] ~= nil then -- Only update existing theme properties
+                Theme[key] = value
+            else
+                warn("[BlindnessHub] Unknown theme property in LoadConfig:", key)
+            end
+        end
+    end
+end
+
+-- The main module to be returned
+local BlindnessHub = {}
+
+function BlindnessHub:Init(initialConfig, parentGuiOverride)
+    local root = RootComponent:New(parentGuiOverride)
+    root:LoadConfig(initialConfig or {})
+    root:RecursiveUpdateGui() -- Apply theme and initial setup
+    return root
+end
+
+return BlindnessHub
